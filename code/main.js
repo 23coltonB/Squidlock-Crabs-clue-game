@@ -93,18 +93,17 @@ scene('Start', () => {
 
   const player = add([
     sprite("bean"),
-    pos(10, height() -40),
+    pos(10, height() - 40),
     area(),
     origin('topleft'),
     body(),
   ]);
-//clambert ai
+  //clambert ai
   const clambert = add([
     sprite("butterfly"),
-    pos(15, height() -200),
+    pos(15, height() - 200),
     area(),
-    solid(),
-    scale(3/8),
+    scale(3 / 8),
   ]);
 
   clambert.action(() => {
@@ -121,11 +120,12 @@ scene('Start', () => {
     player.move((200), 0);
   });
   player.collides('door', () => {
-    if (keyIsPressed('e')) {
+    keyPress('e', () => {
       destroy(player);
       go('building1');
-    }
+    });
   });
+
   //
 });
 
@@ -157,7 +157,7 @@ scene('building1', () => {
     solid(),
     color(50.2, 50.2, 50.2),
   ]);
-   // add the walls
+  // add the walls
   add([
     rect(width(), 20),
     pos(0, height() - 20),
@@ -202,10 +202,9 @@ scene('building1', () => {
   //clambert ai
   const clambert = add([
     sprite("butterfly"),
-    pos(15, height() -200),
+    pos(15, height() - 200),
     area(),
-    solid(),
-    scale(3/8),
+    scale(3 / 8),
   ]);
 
   clambert.action(() => {
@@ -221,11 +220,11 @@ scene('building1', () => {
   keyDown("right", () => {
     player.move((200), 0);
   });
-player.collides('door', () => {
-    if (keyIsPressed('e')) {
+  player.collides('door', () => {
+    keyPress('e', () => {
       destroy(player);
       go('Start');
-    }
+    });
   });
 });
 

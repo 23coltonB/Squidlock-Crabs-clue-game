@@ -2998,12 +2998,34 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       sprite("butterfly"),
       pos(15, height() - 200),
       area(),
-      solid(),
       scale(3 / 8)
     ]);
     clambert.action(() => {
       const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
       clambert.move(vectorToPlayer);
+    });
+    const promptText = add([
+      text("Press E to enter"),
+      pos(width() / 2, height() / 2),
+      origin("center"),
+      color(1, 1, 1),
+      scale(2),
+      layer("ui"),
+      {
+        showing: false
+      }
+    ]);
+    player.collides("door", (door) => {
+      promptText.showing = true;
+      if (keyIsPressed("e")) {
+        destroy(player);
+        go("Start");
+      }
+    });
+    player.action(() => {
+      if (!player.isColliding("door")) {
+        promptText.showing = false;
+      }
     });
     keyDown("left", () => {
       player.move(-200, 0);
@@ -3012,10 +3034,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       player.move(200, 0);
     });
     player.collides("door", () => {
-      if (keyIsPressed("e")) {
+      keyPress("e", () => {
         destroy(player);
         go("building1");
-      }
+      });
     });
   });
   scene("building1", () => {
@@ -3086,7 +3108,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       sprite("butterfly"),
       pos(15, height() - 200),
       area(),
-      solid(),
       scale(3 / 8)
     ]);
     clambert.action(() => {
@@ -3100,10 +3121,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       player.move(200, 0);
     });
     player.collides("door", () => {
-      if (keyIsPressed("e")) {
+      keyPress("e", () => {
         destroy(player);
         go("Start");
-      }
+      });
     });
   });
   go("Title Screen");
