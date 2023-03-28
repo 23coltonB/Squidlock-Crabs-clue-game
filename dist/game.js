@@ -2985,7 +2985,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       pos(width() * 3 / 4, height() - 50),
       area(),
       origin("center"),
-      "door"
+      "door1"
+    ]);
+    const door2 = add([
+      sprite("door"),
+      pos(width() * 2 / 4, height() - 50),
+      area(),
+      origin("center"),
+      "door2"
     ]);
     const player = add([
       sprite("bean"),
@@ -3004,39 +3011,22 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
       clambert.move(vectorToPlayer);
     });
-    const promptText = add([
-      text("Press E to enter"),
-      pos(width() / 2, height() / 2),
-      origin("center"),
-      color(1, 1, 1),
-      scale(2),
-      layer("ui"),
-      {
-        showing: false
-      }
-    ]);
-    player.collides("door", (door) => {
-      promptText.showing = true;
-      if (keyIsPressed("e")) {
-        destroy(player);
-        go("Start");
-      }
-    });
-    player.action(() => {
-      if (!player.isColliding("door")) {
-        promptText.showing = false;
-      }
-    });
     keyDown("left", () => {
       player.move(-200, 0);
     });
     keyDown("right", () => {
       player.move(200, 0);
     });
-    player.collides("door", () => {
+    player.collides("door1", () => {
       keyPress("e", () => {
         destroy(player);
         go("building1");
+      });
+    });
+    player.collides("door2", () => {
+      keyPress("e", () => {
+        destroy(player);
+        go("building2");
       });
     });
   });
@@ -3091,6 +3081,61 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       color(50.2, 50.2, 50.2)
     ]);
     const door1 = add([
+      sprite("door"),
+      pos(width() * 2 / 4, height() - 50),
+      area(),
+      origin("center"),
+      "door"
+    ]);
+    const player = add([
+      sprite("bean"),
+      pos(width() * 2 / 4 + 100, height() - 50),
+      area(),
+      origin("topleft"),
+      body()
+    ]);
+    const clambert = add([
+      sprite("butterfly"),
+      pos(15, height() - 200),
+      area(),
+      scale(3 / 8)
+    ]);
+    clambert.action(() => {
+      const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
+      clambert.move(vectorToPlayer);
+    });
+    keyDown("left", () => {
+      player.move(-200, 0);
+    });
+    keyDown("right", () => {
+      player.move(200, 0);
+    });
+    player.collides("door", () => {
+      keyPress("e", () => {
+        destroy(player);
+        go("Start");
+      });
+    });
+  });
+  scene("building2", () => {
+    add([
+      rect(600, height()),
+      outline(4),
+      pos(width() / 2, height() / 2),
+      origin("center"),
+      area(),
+      color(100, 100, 50)
+    ]);
+    add([
+      rect(width(), 20),
+      outline(4),
+      pos(0, height()),
+      origin("botleft"),
+      area(),
+      solid(),
+      color(50.2, 50.2, 50.2)
+    ]);
+    const door2 = add([
       sprite("door"),
       pos(width() * 2 / 4, height() - 50),
       area(),
