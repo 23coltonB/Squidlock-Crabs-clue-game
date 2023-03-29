@@ -36,6 +36,7 @@ var doorOpen2 = false;
 var doorOpen3 = false;
 var doorOpen4 = false;
 var start2Street = false;
+var policeStationOpen = false;
 // bounderies
 
 // initialize context
@@ -47,6 +48,11 @@ kaboom({
 loadSprite("bean", "sprites/bean.png")
 loadSprite("door", "sprites/door.png");
 loadSprite("butterfly", "sprites/butterfly.png");
+//suspect
+loadSprite("bag", "sprites/bag.png");
+loadSprite("ghosty", "sprites/ghosty.png");
+loadSprite("brock", "sprites/brock.png");
+loadSprite("bobo", "sprites/bobo.png");
 
 //sounds/music loading
 
@@ -100,10 +106,16 @@ scene('Start', () => {
     solid(),
     color(36, 36, 36),
   ]);
-  //right
-
-
+  
   //sprites
+  const policeDoor = add([
+    sprite('door'),
+    pos(50, height() - 50),
+    area(),
+    origin("center"),
+    "pDoor",
+  ]);
+  
   const door1 = add([
     sprite('door'),
     pos(width() * 3 / 4, height() - 50),
@@ -188,6 +200,15 @@ scene('Start', () => {
     });
   });
 
+    player.collides("pDoor", () => {
+    keyPress('e', () => {
+      destroy(player);
+      doorOpen2 = false; // set doorOpen2 to true
+      doorOpen1 = false;
+      policeStationOpen = true;
+      go('policeStation');
+    });
+  });
   //
 });
 
@@ -296,6 +317,92 @@ scene('Start2', () => {
     });
   });
 
+});
+
+scene('policeStation', () => {
+  add([
+    rect(width() - 500, height() * 3/4 + (height() / 2)),
+    pos((width() / 2), (height() - 50)),
+    origin("center"),
+    area(),
+    color(5, 5, 5),
+  ]);
+
+  //left
+  add([
+    rect(20, height()),
+    pos((width() * 1 / 8), 0),
+    area(),
+    solid(),
+    color(36, 36, 36),
+  ]);
+
+  //right
+  add([
+    rect(20, height()),
+    pos(width() * (7 / 8) - 20, 0),
+    area(),
+    solid(),
+    color(36, 36, 36),
+  ]);
+
+  //floor
+  add([
+    rect(width(), 20),
+    outline(4),
+    pos(0, height()),
+    origin("botleft"),
+    area(),
+    solid(),
+    color(50.2, 50.2, 50.2),
+  ]);
+
+  //sprites
+
+    const policeDoor = add([
+    sprite('door'),
+    pos((width() * 3/4) + 60, height() - 50),
+    area(),
+    origin("center"),
+    "pDoor",
+  ]);
+  
+  const player = add([
+    sprite("bean"),
+    pos((width() * 3/4) + 60, height() - 50),
+    area(),
+    origin('center'),
+    body(),
+  ]);
+
+  //clambert ai
+  const clambert = add([
+    sprite("butterfly"),
+    pos((width() * 3/4) + 60, height() - 50),
+    area(),
+    scale(3 / 8),
+  ]);
+
+  clambert.action(() => {
+    const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
+    clambert.move(vectorToPlayer);
+  });
+  
+    //controls
+  keyDown("left", () => {
+    player.move(-(200), 0);
+  });
+
+  keyDown("right", () => {
+    player.move((200), 0);
+  });
+  player.collides("pDoor", () => {
+    keyPress('e', () => {
+      destroy(player);
+      policeStationOpen = true; // set to true
+      go('Start');
+    });
+  });
 });
 
 scene('building1', () => {

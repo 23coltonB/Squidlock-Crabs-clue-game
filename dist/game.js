@@ -2947,12 +2947,17 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var doorOpen3 = false;
   var doorOpen4 = false;
   var start2Street = false;
+  var policeStationOpen = false;
   no({
     background: [36, 36, 36]
   });
   loadSprite("bean", "sprites/bean.png");
   loadSprite("door", "sprites/door.png");
   loadSprite("butterfly", "sprites/butterfly.png");
+  loadSprite("bag", "sprites/bag.png");
+  loadSprite("ghosty", "sprites/ghosty.png");
+  loadSprite("brock", "sprites/brock.png");
+  loadSprite("bobo", "sprites/bobo.png");
   scene("Title Screen", () => {
     add([
       rect(width(), height()),
@@ -2991,6 +2996,13 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       area(),
       solid(),
       color(36, 36, 36)
+    ]);
+    const policeDoor = add([
+      sprite("door"),
+      pos(50, height() - 50),
+      area(),
+      origin("center"),
+      "pDoor"
     ]);
     const door1 = add([
       sprite("door"),
@@ -3062,6 +3074,15 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         doorOpen2 = true;
         doorOpen1 = false;
         go("building2");
+      });
+    });
+    player.collides("pDoor", () => {
+      keyPress("e", () => {
+        destroy(player);
+        doorOpen2 = false;
+        doorOpen1 = false;
+        policeStationOpen = true;
+        go("policeStation");
       });
     });
   });
@@ -3148,6 +3169,75 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         doorOpen4 = true;
         doorOpen3 = false;
         go("building4");
+      });
+    });
+  });
+  scene("policeStation", () => {
+    add([
+      rect(width() - 500, height() * 3 / 4 + height() / 2),
+      pos(width() / 2, height() - 50),
+      origin("center"),
+      area(),
+      color(5, 5, 5)
+    ]);
+    add([
+      rect(20, height()),
+      pos(width() * 1 / 8, 0),
+      area(),
+      solid(),
+      color(36, 36, 36)
+    ]);
+    add([
+      rect(20, height()),
+      pos(width() * (7 / 8) - 20, 0),
+      area(),
+      solid(),
+      color(36, 36, 36)
+    ]);
+    add([
+      rect(width(), 20),
+      outline(4),
+      pos(0, height()),
+      origin("botleft"),
+      area(),
+      solid(),
+      color(50.2, 50.2, 50.2)
+    ]);
+    const policeDoor = add([
+      sprite("door"),
+      pos(width() * 3 / 4 + 60, height() - 50),
+      area(),
+      origin("center"),
+      "pDoor"
+    ]);
+    const player = add([
+      sprite("bean"),
+      pos(width() * 3 / 4 + 60, height() - 50),
+      area(),
+      origin("center"),
+      body()
+    ]);
+    const clambert = add([
+      sprite("butterfly"),
+      pos(width() * 3 / 4 + 60, height() - 50),
+      area(),
+      scale(3 / 8)
+    ]);
+    clambert.action(() => {
+      const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
+      clambert.move(vectorToPlayer);
+    });
+    keyDown("left", () => {
+      player.move(-200, 0);
+    });
+    keyDown("right", () => {
+      player.move(200, 0);
+    });
+    player.collides("pDoor", () => {
+      keyPress("e", () => {
+        destroy(player);
+        policeStationOpen = true;
+        go("Start");
       });
     });
   });
