@@ -3052,6 +3052,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       keyPress("e", () => {
         destroy(player);
         doorOpen1 = true;
+        doorOpen2 = false;
         go("building1");
       });
     });
@@ -3059,6 +3060,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       keyPress("e", () => {
         destroy(player);
         doorOpen2 = true;
+        doorOpen1 = false;
         go("building2");
       });
     });
@@ -3136,6 +3138,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       keyPress("e", () => {
         destroy(player);
         doorOpen3 = true;
+        doorOpen4 = false;
         go("building3");
       });
     });
@@ -3143,6 +3146,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       keyPress("e", () => {
         destroy(player);
         doorOpen4 = true;
+        doorOpen3 = false;
         go("building4");
       });
     });

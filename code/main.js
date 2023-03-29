@@ -174,6 +174,7 @@ scene('Start', () => {
     keyPress('e', () => {
       destroy(player);
       doorOpen1 = true; // set doorOpen1 to true
+      doorOpen2 = false;
       go('building1');
     });
   });
@@ -182,6 +183,7 @@ scene('Start', () => {
     keyPress('e', () => {
       destroy(player);
       doorOpen2 = true; // set doorOpen2 to true
+      doorOpen1 = false;
       go('building2');
     });
   });
@@ -279,7 +281,8 @@ scene('Start2', () => {
   player.collides("door3", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen3 = true; // set doorOpen1 to true
+      doorOpen3 = true; // set doorOpen3 to true
+      doorOpen4 = false;
       go('building3');
     });
   });
@@ -288,6 +291,7 @@ scene('Start2', () => {
     keyPress('e', () => {
       destroy(player);
       doorOpen4 = true; // set doorOpen2 to true
+      doorOpen3 = false;
       go('building4');
     });
   });
