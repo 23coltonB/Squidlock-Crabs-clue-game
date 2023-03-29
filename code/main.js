@@ -58,12 +58,14 @@ scene('Title Screen', () => {
     rect(width(), height()),
     color(0, 0, 0),
   ]);
+  
   add([
     text('Squidlock Crabs: Title is yet to be determind'),
     pos(width() / 2, height() * (1 / 4)),
     scale(3 / 5),
     origin("center"),
   ]);
+  
   add([
     text('Press "Enter" to start'),
     pos(width() / 2, height() * (2 / 4)),
@@ -140,23 +142,23 @@ scene('Start', () => {
 
   // move player and Clambert if door is open
   player.action(() => {
-    if (doorOpen1 == true) {
+    if (doorOpen1 == true){
       player.pos = vec2(width() * 3 / 4, height() - 50);
       clambert.pos = vec2(width() * 3 / 4, height() - 50);
       doorOpen1 = false;
-    } else if (doorOpen2 == true) {
+    }else if (doorOpen2 == true){
       player.pos = vec2(width() * 2 / 4, height() - 50);
       clambert.pos = vec2(width() * 2 / 4, height() - 50);
       doorOpen2 = false;
-    }else if (start2Street == true) {
-  player.pos = vec2(width() - 80, height() - 75);
-  clambert.pos = vec2(width() - 80, height() - 75);
-  start2Street = true;
-}
+    }else if (start2Street == true){
+      player.pos = vec2(width()-50, height() - 50);
+      clambert.pos = vec2(width()-50, height() - 50);
+      start2Street = false; // add this line to set start2Street to false
+    }
 
     if (player.pos.x >= width()) {
-      go('Start2');
       start2Street = true;
+      go('Start2');
     }
   });
 
@@ -263,8 +265,6 @@ scene('Start2', () => {
 
     if (player.pos.x <= 0) {
       go('Start');
-      player.pos = vec2(width(), height() - 50);
-      clambert.pos = vec2(width(), height() - 50);
     }
   });
 
@@ -748,4 +748,3 @@ function findGuilty() {
     }
   }
 }
-

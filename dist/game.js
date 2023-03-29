@@ -3033,13 +3033,13 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         clambert.pos = vec2(width() * 2 / 4, height() - 50);
         doorOpen2 = false;
       } else if (start2Street == true) {
-        player.pos = vec2(width() - 80, height() - 75);
-        clambert.pos = vec2(width() - 80, height() - 75);
-        start2Street = true;
+        player.pos = vec2(width() - 50, height() - 50);
+        clambert.pos = vec2(width() - 50, height() - 50);
+        start2Street = false;
       }
       if (player.pos.x >= width()) {
-        go("Start2");
         start2Street = true;
+        go("Start2");
       }
     });
     keyDown("left", () => {
@@ -3124,8 +3124,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       }
       if (player.pos.x <= 0) {
         go("Start");
-        player.pos = vec2(width(), height() - 50);
-        clambert.pos = vec2(width(), height() - 50);
       }
     });
     keyDown("left", () => {
