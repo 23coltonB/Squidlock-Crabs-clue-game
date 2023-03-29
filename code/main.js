@@ -300,7 +300,7 @@ scene('Start2', () => {
 
 scene('building1', () => {
   add([
-    rect(600, height()),
+    rect(width()/2, height()),
     pos((width() / 2), (height() / 2)),
     origin("center"),
     area(),
@@ -311,7 +311,7 @@ scene('building1', () => {
   //left
   add([
     rect(20, height()),
-    pos((width() * 1 / 4) + 60, 0),
+    pos((width() * 1 / 4) - 20, 0),
     area(),
     solid(),
     color(36, 36, 36),
@@ -320,7 +320,7 @@ scene('building1', () => {
   //right
   add([
     rect(20, height()),
-    pos((width() * 3 / 4) - 90, 0),
+    pos((width() * 3 / 4), 0),
     area(),
     solid(),
     color(36, 36, 36),
@@ -387,7 +387,7 @@ scene('building1', () => {
 
 scene('building2', () => {
   add([
-    rect(600, height()),
+    rect(width() / 2, height()),
     pos((width() / 2), (height() / 2)),
     origin("center"),
     area(),
@@ -398,7 +398,7 @@ scene('building2', () => {
   //left
   add([
     rect(20, height()),
-    pos((width() * 1 / 4) + 60, 0),
+    pos((width() * 1 / 4) - 20, 0),
     area(),
     solid(),
     color(36, 36, 36),
@@ -407,7 +407,7 @@ scene('building2', () => {
   //right
   add([
     rect(20, height()),
-    pos((width() * 3 / 4) - 90, 0),
+    pos((width() * 3 / 4), 0),
     area(),
     solid(),
     color(36, 36, 36),
@@ -473,7 +473,7 @@ scene('building2', () => {
 
 scene('building3', () => {
   add([
-    rect(600, height()),
+    rect(width() / 2, height()),
     pos((width() / 2), (height() / 2)),
     origin("center"),
     area(),
@@ -481,10 +481,10 @@ scene('building3', () => {
   ]);
 
   // add the walls
-  //left
+    //left
   add([
     rect(20, height()),
-    pos((width() * 1 / 4) + 60, 0),
+    pos((width() * 1 / 4) - 20, 0),
     area(),
     solid(),
     color(36, 36, 36),
@@ -493,7 +493,7 @@ scene('building3', () => {
   //right
   add([
     rect(20, height()),
-    pos((width() * 3 / 4) - 90, 0),
+    pos((width() * 3 / 4), 0),
     area(),
     solid(),
     color(36, 36, 36),
@@ -561,7 +561,7 @@ scene('building3', () => {
 
 scene('building4', () => {
   add([
-    rect(600, height()),
+    rect(width() / 2, height()),
     pos((width() / 2), (height() / 2)),
     origin("center"),
     area(),
@@ -572,7 +572,7 @@ scene('building4', () => {
   //left
   add([
     rect(20, height()),
-    pos((width() * 1 / 4) + 60, 0),
+    pos((width() * 1 / 4) - 20, 0),
     area(),
     solid(),
     color(36, 36, 36),
@@ -581,7 +581,7 @@ scene('building4', () => {
   //right
   add([
     rect(20, height()),
-    pos((width() * 3 / 4) - 90, 0),
+    pos((width() * 3 / 4), 0),
     area(),
     solid(),
     color(36, 36, 36),

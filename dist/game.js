@@ -3153,7 +3153,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   });
   scene("building1", () => {
     add([
-      rect(600, height()),
+      rect(width() / 2, height()),
       pos(width() / 2, height() / 2),
       origin("center"),
       area(),
@@ -3161,14 +3161,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     add([
       rect(20, height()),
-      pos(width() * 1 / 4 + 60, 0),
+      pos(width() * 1 / 4 - 20, 0),
       area(),
       solid(),
       color(36, 36, 36)
     ]);
     add([
       rect(20, height()),
-      pos(width() * 3 / 4 - 90, 0),
+      pos(width() * 3 / 4, 0),
       area(),
       solid(),
       color(36, 36, 36)
@@ -3222,7 +3222,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   });
   scene("building2", () => {
     add([
-      rect(600, height()),
+      rect(width() / 2, height()),
       pos(width() / 2, height() / 2),
       origin("center"),
       area(),
@@ -3230,14 +3230,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     add([
       rect(20, height()),
-      pos(width() * 1 / 4 + 60, 0),
+      pos(width() * 1 / 4 - 20, 0),
       area(),
       solid(),
       color(36, 36, 36)
     ]);
     add([
       rect(20, height()),
-      pos(width() * 3 / 4 - 90, 0),
+      pos(width() * 3 / 4, 0),
       area(),
       solid(),
       color(36, 36, 36)
@@ -3291,7 +3291,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   });
   scene("building3", () => {
     add([
-      rect(600, height()),
+      rect(width() / 2, height()),
       pos(width() / 2, height() / 2),
       origin("center"),
       area(),
@@ -3299,14 +3299,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     add([
       rect(20, height()),
-      pos(width() * 1 / 4 + 60, 0),
+      pos(width() * 1 / 4 - 20, 0),
       area(),
       solid(),
       color(36, 36, 36)
     ]);
     add([
       rect(20, height()),
-      pos(width() * 3 / 4 - 90, 0),
+      pos(width() * 3 / 4, 0),
       area(),
       solid(),
       color(36, 36, 36)
@@ -3360,7 +3360,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   });
   scene("building4", () => {
     add([
-      rect(600, height()),
+      rect(width() / 2, height()),
       pos(width() / 2, height() / 2),
       origin("center"),
       area(),
@@ -3368,14 +3368,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     add([
       rect(20, height()),
-      pos(width() * 1 / 4 + 60, 0),
+      pos(width() * 1 / 4 - 20, 0),
       area(),
       solid(),
       color(36, 36, 36)
     ]);
     add([
       rect(20, height()),
-      pos(width() * 3 / 4 - 90, 0),
+      pos(width() * 3 / 4, 0),
       area(),
       solid(),
       color(36, 36, 36)
