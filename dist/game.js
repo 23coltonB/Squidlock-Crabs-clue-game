@@ -3667,25 +3667,25 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       if ((npcInBuilding[1] == npcInBuilding[0] || npcInBuilding[0] == npcInBuilding[2] || npcInBuilding[0] == npcInBuilding[3]) && npcInBuilding[0] != "") {
         console.log("there is a match");
         npcInBuilding[0] = "";
-        addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 0);
+        addRandomNPCToScene(-5e4, -5e4, 0);
       }
     } else if (buildingNumbers == 1) {
       if ((npcInBuilding[1] == npcInBuilding[0] || npcInBuilding[1] == npcInBuilding[2] || npcInBuilding[1] == npcInBuilding[3]) && npcInBuilding[1] != "") {
         console.log("there is a match");
         npcInBuilding[1] = "";
-        addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 1);
+        addRandomNPCToScene(-5e4, -5e4, 1);
       }
     } else if (buildingNumbers == 2) {
       if (npcInBuilding[2] == npcInBuilding[1] || npcInBuilding[2] == npcInBuilding[0] || npcInBuilding[2] == npcInBuilding[3] && npcInBuilding[2] != "") {
         console.log("there is a match");
         npcInBuilding[2] = "";
-        addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 2);
+        addRandomNPCToScene(-5e4, -5e4, 2);
       }
     } else if (buildingNumbers == 3) {
       if (npcInBuilding[0] == npcInBuilding[3] || npcInBuilding[2] == npcInBuilding[3] || npcInBuilding[1] == npcInBuilding[3] && npcInBuilding[3] != "") {
         console.log("there is a match");
         npcInBuilding[3] = "";
-        addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 3);
+        addRandomNPCToScene(-5e4, -5e4, 3);
       }
     }
   }
