@@ -37,7 +37,10 @@ var doorOpen3 = false;
 var doorOpen4 = false;
 var start2Street = false;
 var policeStationOpen = false;
-// bounderies
+
+let npcInBuilding = ['', '', '', ''];
+
+
 
 // initialize context
 kaboom({
@@ -48,6 +51,7 @@ kaboom({
 loadSprite("bean", "sprites/bean.png")
 loadSprite("door", "sprites/door.png");
 loadSprite("butterfly", "sprites/butterfly.png");
+loadSprite("cut", "sprites/cut.png");
 //suspect
 loadSprite("bag", "sprites/bag.png");
 loadSprite("ghosty", "sprites/ghosty.png");
@@ -64,14 +68,14 @@ scene('Title Screen', () => {
     rect(width(), height()),
     color(0, 0, 0),
   ]);
-  
+
   add([
-    text('Squidlock Crabs: Title is yet to be determind'),
+    text('Tentacles and Treachery: A Whodunit Under the Sea'),
     pos(width() / 2, height() * (1 / 4)),
     scale(3 / 5),
     origin("center"),
   ]);
-  
+
   add([
     text('Press "Enter" to start'),
     pos(width() / 2, height() * (2 / 4)),
@@ -106,8 +110,14 @@ scene('Start', () => {
     solid(),
     color(36, 36, 36),
   ]);
-  
+
   //sprites
+    //npc initialization
+  addRandomNPCToScene(-1000000, -1000000, 0);
+  addRandomNPCToScene(-1000000, -1000000, 1);
+  addRandomNPCToScene(-1000000, -1000000, 2);
+  addRandomNPCToScene(-1000000, -1000000, 3);
+  //everything else
   const policeDoor = add([
     sprite('door'),
     pos(50, height() - 50),
@@ -115,7 +125,7 @@ scene('Start', () => {
     origin("center"),
     "pDoor",
   ]);
-  
+
   const door1 = add([
     sprite('door'),
     pos(width() * 3 / 4, height() - 50),
@@ -154,17 +164,17 @@ scene('Start', () => {
 
   // move player and Clambert if door is open
   player.action(() => {
-    if (doorOpen1 == true){
+    if (doorOpen1 == true) {
       player.pos = vec2(width() * 3 / 4, height() - 50);
       clambert.pos = vec2(width() * 3 / 4, height() - 50);
       doorOpen1 = false;
-    }else if (doorOpen2 == true){
+    } else if (doorOpen2 == true) {
       player.pos = vec2(width() * 2 / 4, height() - 50);
       clambert.pos = vec2(width() * 2 / 4, height() - 50);
       doorOpen2 = false;
-    }else if (start2Street == true){
-      player.pos = vec2(width()-50, height() - 50);
-      clambert.pos = vec2(width()-50, height() - 50);
+    } else if (start2Street == true) {
+      player.pos = vec2(width() - 50, height() - 50);
+      clambert.pos = vec2(width() - 50, height() - 50);
       start2Street = false; // add this line to set start2Street to false
     }
 
@@ -200,7 +210,7 @@ scene('Start', () => {
     });
   });
 
-    player.collides("pDoor", () => {
+  player.collides("pDoor", () => {
     keyPress('e', () => {
       destroy(player);
       doorOpen2 = false; // set doorOpen2 to true
@@ -251,6 +261,14 @@ scene('Start2', () => {
     area(),
     origin("center"),
     "door4",
+  ]);
+
+  const flowerShop = add([
+    sprite('door'),
+    pos(width() * 5 / 8, height() - 50),
+    area(),
+    origin("center"),
+    "flowerShop",
   ]);
 
   const player = add([
@@ -321,7 +339,7 @@ scene('Start2', () => {
 
 scene('policeStation', () => {
   add([
-    rect(width() - 500, height() * 3/4 + (height() / 2)),
+    rect(width() - 500, height() * 3 / 4 + (height() / 2)),
     pos((width() / 2), (height() - 50)),
     origin("center"),
     area(),
@@ -359,17 +377,25 @@ scene('policeStation', () => {
 
   //sprites
 
-    const policeDoor = add([
+  const policeOfficer = add([
+    sprite('cut'),
+    pos(width() * 1 / 4, height() - 50),
+    area(),
+    origin('center'),
+    body(),
+  ]);
+
+  const policeDoor = add([
     sprite('door'),
-    pos((width() * 3/4) + 60, height() - 50),
+    pos((width() * 3 / 4) + 60, height() - 50),
     area(),
     origin("center"),
     "pDoor",
   ]);
-  
+
   const player = add([
     sprite("bean"),
-    pos((width() * 3/4) + 60, height() - 50),
+    pos((width() * 3 / 4) + 60, height() - 50),
     area(),
     origin('center'),
     body(),
@@ -378,7 +404,7 @@ scene('policeStation', () => {
   //clambert ai
   const clambert = add([
     sprite("butterfly"),
-    pos((width() * 3/4) + 60, height() - 50),
+    pos((width() * 3 / 4) + 60, height() - 50),
     area(),
     scale(3 / 8),
   ]);
@@ -387,8 +413,8 @@ scene('policeStation', () => {
     const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
     clambert.move(vectorToPlayer);
   });
-  
-    //controls
+
+  //controls
   keyDown("left", () => {
     player.move(-(200), 0);
   });
@@ -407,7 +433,7 @@ scene('policeStation', () => {
 
 scene('building1', () => {
   add([
-    rect(width()/2, height()),
+    rect(width() / 2, height()),
     pos((width() / 2), (height() / 2)),
     origin("center"),
     area(),
@@ -444,6 +470,10 @@ scene('building1', () => {
     color(50.2, 50.2, 50.2),
   ]);
 
+  //NPC 
+  addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 0);
+
+  //other sprites
 
   const door1 = add([
     sprite('door'),
@@ -531,6 +561,11 @@ scene('building2', () => {
     color(50.2, 50.2, 50.2),
   ]);
 
+  //NPC 
+  //npc spawn
+  
+  addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 1);
+
   const door2 = add([
     sprite('door'),
     pos(width() * 2 / 4, height() - 50),
@@ -575,7 +610,8 @@ scene('building2', () => {
       go('Start');
     });
   });
-  //
+  //randomly generated rooms/charcters
+
 });
 
 scene('building3', () => {
@@ -588,7 +624,7 @@ scene('building3', () => {
   ]);
 
   // add the walls
-    //left
+  //left
   add([
     rect(20, height()),
     pos((width() * 1 / 4) - 20, 0),
@@ -617,6 +653,8 @@ scene('building3', () => {
     color(50.2, 50.2, 50.2),
   ]);
 
+  //NPC 
+  addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 2);
 
   const door3 = add([
     sprite('door'),
@@ -705,6 +743,8 @@ scene('building4', () => {
     color(50.2, 50.2, 50.2),
   ]);
 
+  //NPC 
+  addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 3);
 
   const door4 = add([
     sprite('door'),
@@ -857,5 +897,99 @@ function findGuilty() {
       i--;
       console.log("duplicate item found, finding another...");
     }
+  }
+}
+
+function addRandomNPCToScene(x, y, buildingNumber) {
+  for (i = 0; i <= 3; i++) {
+    if (npcInBuilding[0] == '' || npcInBuilding[1] == '' || npcInBuilding[2] == '' || npcInBuilding[3] == '') {
+      var addRandom = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
+      if (addRandom == 1) {
+        npcInBuilding[buildingNumber] = 'bag';
+      } else if (addRandom == 2) {
+        npcInBuilding[buildingNumber] = 'bobo';
+      } else if (addRandom == 3) {
+        npcInBuilding[buildingNumber] = 'brock';
+      } else if (addRandom == 4) {
+        npcInBuilding[buildingNumber] = 'ghostly'
+      }
+      check(buildingNumber);
+    } else {
+      i = 3;
+      spawnNPC(x, y, buildingNumber);
+    }
+  }
+}
+
+function check(buildingNumbers) {
+  console.log(npcInBuilding);
+  if (buildingNumbers == 0) {
+    if ((npcInBuilding[1] == npcInBuilding[0] || npcInBuilding[0] == npcInBuilding[2] || npcInBuilding[0] == npcInBuilding[3]) && npcInBuilding[0] != '') {
+      console.log('there is a match');
+      npcInBuilding[0] = '';
+      addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 0);
+    }
+  } else if (buildingNumbers == 1) {
+    if ((npcInBuilding[1] == npcInBuilding[0] || npcInBuilding[1] == npcInBuilding[2] || npcInBuilding[1] == npcInBuilding[3]) && npcInBuilding[1] != '') {
+      console.log('there is a match');
+      npcInBuilding[1] = '';
+      addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 1);
+    }
+  } else if (buildingNumbers == 2) {
+    if (npcInBuilding[2] == npcInBuilding[1] || npcInBuilding[2] == npcInBuilding[0] || npcInBuilding[2] == npcInBuilding[3] && npcInBuilding[2] != '') {
+      console.log('there is a match');
+      npcInBuilding[2] = '';
+      addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 2);
+    }
+  } else if (buildingNumbers == 3) {
+    if (npcInBuilding[0] == npcInBuilding[3] || npcInBuilding[2] == npcInBuilding[3] || npcInBuilding[1] == npcInBuilding[3] && npcInBuilding[3] != '') {
+      console.log('there is a match');
+      npcInBuilding[3] = '';
+      addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 3);
+    }
+  }
+}
+
+function spawnNPC(x, y, number) {
+  if (npcInBuilding[number] == 'bag') {
+    console.log('bag was selected ' + number);
+    const npc1 = add([
+      sprite('bag'),
+      pos(x, y),
+      origin('center'),
+      area(),
+      solid(),
+      "npc",
+    ]);
+  } else if (npcInBuilding[number] == 'bobo') {
+    console.log('bobo was selected ' + number);
+    const npc2 = add([
+      sprite('bobo'),
+      pos(x, y),
+      area(),
+      origin("center"),
+      solid(),
+      "npc",
+    ]);
+  } else if (npcInBuilding[number] == 'brock') {
+    console.log('brock was selected ' + number);
+    const npc3 = add([
+      sprite('brock'),
+      pos(x, y),
+      origin("center"),
+      area(),
+      solid(),
+      "npc",
+    ]);
+  } else if (npcInBuilding[number] == 'ghostly') {
+    console.log('ghostly was selected ' + number);
+    const npc4 = add([
+      sprite('ghosty'),
+      pos(x, y),
+      area(),
+      solid(),
+      origin('center'),
+      "npc",
+    ]);
   }
 }
