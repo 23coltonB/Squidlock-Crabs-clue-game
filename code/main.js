@@ -113,10 +113,9 @@ scene('Start', () => {
 
   //sprites
     //npc initialization
-  addRandomNPCToScene(-1000000, -1000000, 0);
-  addRandomNPCToScene(-1000000, -1000000, 1);
-  addRandomNPCToScene(-1000000, -1000000, 2);
-  addRandomNPCToScene(-1000000, -1000000, 3);
+  for (var i = 0; i <= 3; i++){
+    addRandomNPCToScene(-1000, -1000, i);
+  }
   //everything else
   const policeDoor = add([
     sprite('door'),

@@ -2999,10 +2999,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       solid(),
       color(36, 36, 36)
     ]);
-    addRandomNPCToScene(-1e6, -1e6, 0);
-    addRandomNPCToScene(-1e6, -1e6, 1);
-    addRandomNPCToScene(-1e6, -1e6, 2);
-    addRandomNPCToScene(-1e6, -1e6, 3);
+    for (var i2 = 0; i2 <= 3; i2++) {
+      addRandomNPCToScene(-1e3, -1e3, i2);
+    }
     const policeDoor = add([
       sprite("door"),
       pos(50, height() - 50),
