@@ -37,7 +37,7 @@ var doorOpen3 = false;
 var doorOpen4 = false;
 var start2Street = false;
 var policeStationOpen = false;
-
+var isInDialoge = false;
 let npcInBuilding = ['', '', '', ''];
 
 
@@ -112,8 +112,8 @@ scene('Start', () => {
   ]);
 
   //sprites
-    //npc initialization
-  for (var i = 0; i <= 3; i++){
+  //npc initialization
+  for (var i = 0; i <= 3; i++) {
     addRandomNPCToScene(-1000, -1000, i);
   }
   //everything else
@@ -382,6 +382,7 @@ scene('policeStation', () => {
     area(),
     origin('center'),
     body(),
+    'officer',
   ]);
 
   const policeDoor = add([
@@ -415,11 +416,15 @@ scene('policeStation', () => {
 
   //controls
   keyDown("left", () => {
-    player.move(-(200), 0);
+    if (isInDialoge == false){
+      player.move(-(200), 0);
+    }
   });
 
   keyDown("right", () => {
-    player.move((200), 0);
+    if (isInDialoge == false){
+      player.move((200), 0);
+    }
   });
   player.collides("pDoor", () => {
     keyPress('e', () => {
@@ -427,6 +432,39 @@ scene('policeStation', () => {
       policeStationOpen = true; // set to true
       go('Start');
     });
+  });
+  //dialoge
+  player.collides("officer", () => {
+    //debug.log('test');
+    isInDialoge = true;
+    const dialogeBox = add([
+      rect(700, 200),
+      origin('center'),
+      pos(width() / 2, (height() * (1 / 4)) - 50),
+      color(255,255,255),
+      outline(4),
+      "dialoge",
+    ]);
+
+    const dialoge = add([
+      text("Hello World! This is a test message brought to you by yours truly! Have a wonderful day!", {
+        size: 20,
+        width: 700,
+        lineSpacing: 10,
+        font: 'apl386', 
+      }),
+      origin('center'),
+      pos(width() / 2, (height() * (1 / 4)) - 100),
+      color(0, 0, 0),
+      'dialoge'
+    ]);
+
+    keyDown("space", () => {
+      isInDialoge = false;
+      destroyAll('dialoge');
+  });
+    
+    player.pos = vec2(player.pos.x + 20, height() - 50);
   });
 });
 
@@ -562,7 +600,7 @@ scene('building2', () => {
 
   //NPC 
   //npc spawn
-  
+
   addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 1);
 
   const door2 = add([
@@ -926,25 +964,25 @@ function check(buildingNumbers) {
     if ((npcInBuilding[1] == npcInBuilding[0] || npcInBuilding[0] == npcInBuilding[2] || npcInBuilding[0] == npcInBuilding[3]) && npcInBuilding[0] != '') {
       console.log('there is a match');
       npcInBuilding[0] = '';
-     addRandomNPCToScene(-50000, -50000, 0);
+      addRandomNPCToScene(-50000, -50000, 0);
     }
   } else if (buildingNumbers == 1) {
     if ((npcInBuilding[1] == npcInBuilding[0] || npcInBuilding[1] == npcInBuilding[2] || npcInBuilding[1] == npcInBuilding[3]) && npcInBuilding[1] != '') {
       console.log('there is a match');
       npcInBuilding[1] = '';
-     addRandomNPCToScene(-50000, -50000, 1);
+      addRandomNPCToScene(-50000, -50000, 1);
     }
   } else if (buildingNumbers == 2) {
     if (npcInBuilding[2] == npcInBuilding[1] || npcInBuilding[2] == npcInBuilding[0] || npcInBuilding[2] == npcInBuilding[3] && npcInBuilding[2] != '') {
       console.log('there is a match');
       npcInBuilding[2] = '';
-     addRandomNPCToScene(-50000, -50000, 2);
+      addRandomNPCToScene(-50000, -50000, 2);
     }
   } else if (buildingNumbers == 3) {
     if (npcInBuilding[0] == npcInBuilding[3] || npcInBuilding[2] == npcInBuilding[3] || npcInBuilding[1] == npcInBuilding[3] && npcInBuilding[3] != '') {
       console.log('there is a match');
       npcInBuilding[3] = '';
-     addRandomNPCToScene(-50000, -50000, 3);
+      addRandomNPCToScene(-50000, -50000, 3);
     }
   }
 }

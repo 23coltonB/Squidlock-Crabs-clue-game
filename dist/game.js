@@ -2948,6 +2948,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var doorOpen4 = false;
   var start2Street = false;
   var policeStationOpen = false;
+  var isInDialoge = false;
   var npcInBuilding = ["", "", "", ""];
   no({
     background: [36, 36, 36]
@@ -3220,7 +3221,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       pos(width() * 1 / 4, height() - 50),
       area(),
       origin("center"),
-      body()
+      body(),
+      "officer"
     ]);
     const policeDoor = add([
       sprite("door"),
@@ -3247,10 +3249,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       clambert.move(vectorToPlayer);
     });
     keyDown("left", () => {
-      player.move(-200, 0);
+      if (isInDialoge == false) {
+        player.move(-200, 0);
+      }
     });
     keyDown("right", () => {
-      player.move(200, 0);
+      if (isInDialoge == false) {
+        player.move(200, 0);
+      }
     });
     player.collides("pDoor", () => {
       keyPress("e", () => {
@@ -3258,6 +3264,34 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         policeStationOpen = true;
         go("Start");
       });
+    });
+    player.collides("officer", () => {
+      isInDialoge = true;
+      const dialogeBox = add([
+        rect(700, 200),
+        origin("center"),
+        pos(width() / 2, height() * (1 / 4) - 50),
+        color(255, 255, 255),
+        outline(4),
+        "dialoge"
+      ]);
+      const dialoge = add([
+        text("Hello World! This is a test message brought to you by yours truly! Have a wonderful day!", {
+          size: 20,
+          width: 700,
+          lineSpacing: 10,
+          font: "apl386"
+        }),
+        origin("center"),
+        pos(width() / 2, height() * (1 / 4) - 100),
+        color(0, 0, 0),
+        "dialoge"
+      ]);
+      keyDown("space", () => {
+        isInDialoge = false;
+        destroyAll("dialoge");
+      });
+      player.pos = vec2(player.pos.x + 20, height() - 50);
     });
   });
   scene("building1", () => {
