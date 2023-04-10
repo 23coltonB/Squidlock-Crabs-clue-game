@@ -37,6 +37,7 @@ var doorOpen3 = false;
 var doorOpen4 = false;
 var start2Street = false;
 var policeStationOpen = false;
+var talk = 0;
 var isInDialoge = false;
 let npcInBuilding = ['', '', '', ''];
 
@@ -416,56 +417,33 @@ scene('policeStation', () => {
 
   //controls
   keyDown("left", () => {
-    if (isInDialoge == false){
+    if (isInDialoge == false) {
       player.move(-(200), 0);
     }
   });
 
   keyDown("right", () => {
-    if (isInDialoge == false){
+    if (isInDialoge == false) {
       player.move((200), 0);
     }
   });
   player.collides("pDoor", () => {
     keyPress('e', () => {
-      destroy(player);
-      policeStationOpen = true; // set to true
-      go('Start');
+      if (isInDialoge == false) {
+        destroy(player);
+        policeStationOpen = true; // set to true
+        go('Start');
+      }
     });
   });
   //dialoge
   player.collides("officer", () => {
-    //debug.log('test');
+    const officerText = ["Hello World! This is a test message brought to you by yours truly! Have a wonderful day!"];
     isInDialoge = true;
-    const dialogeBox = add([
-      rect(700, 200),
-      origin('center'),
-      pos(width() / 2, (height() * (1 / 4)) - 50),
-      color(255,255,255),
-      outline(4),
-      "dialoge",
-    ]);
-
-    const dialoge = add([
-      text("Hello World! This is a test message brought to you by yours truly! Have a wonderful day!", {
-        size: 20,
-        width: 700,
-        lineSpacing: 10,
-        font: 'apl386', 
-      }),
-      origin('center'),
-      pos(width() / 2, (height() * (1 / 4)) - 100),
-      color(0, 0, 0),
-      'dialoge'
-    ]);
-
-    keyDown("space", () => {
-      isInDialoge = false;
-      destroyAll('dialoge');
-  });
-    
+    showNextDialog(officerText);
     player.pos = vec2(player.pos.x + 20, height() - 50);
   });
+  //
 });
 
 scene('building1', () => {
@@ -543,12 +521,17 @@ scene('building1', () => {
 
   //controls
   keyDown("left", () => {
-    player.move(-(200), 0);
+    if (isInDialoge == false) {
+      player.move(-(200), 0);
+    }
   });
 
   keyDown("right", () => {
-    player.move((200), 0);
+    if (isInDialoge == false) {
+      player.move((200), 0);
+    }
   });
+  
   player.collides("door1", () => {
     keyPress('e', () => {
       destroy(player);
@@ -556,7 +539,13 @@ scene('building1', () => {
       go('Start');
     });
   });
-
+  // dialoge
+  player.collides("npc", () => {
+    isInDialoge = true;
+    dialogeCheck(0);
+    player.pos = vec2(player.pos.x + 20, height() - 50);
+  });
+  //
 });
 
 scene('building2', () => {
@@ -634,12 +623,17 @@ scene('building2', () => {
 
   //controls
   keyDown("left", () => {
-    player.move(-(200), 0);
+    if (isInDialoge == false) {
+      player.move(-(200), 0);
+    }
   });
 
   keyDown("right", () => {
-    player.move((200), 0);
+    if (isInDialoge == false) {
+      player.move((200), 0);
+    }
   });
+  
   player.collides('door2', () => {
     keyPress('e', () => {
       doorOpen2 = true;
@@ -647,7 +641,12 @@ scene('building2', () => {
       go('Start');
     });
   });
-  //randomly generated rooms/charcters
+    // dialoge
+  player.collides("npc", () => {
+    isInDialoge = true;
+    dialogeCheck(1);
+    player.pos = vec2(player.pos.x + 20, height() - 50);
+  });
 
 });
 
@@ -724,12 +723,17 @@ scene('building3', () => {
 
   //controls
   keyDown("left", () => {
-    player.move(-(200), 0);
+    if (isInDialoge == false) {
+      player.move(-(200), 0);
+    }
   });
 
   keyDown("right", () => {
-    player.move((200), 0);
+    if (isInDialoge == false) {
+      player.move((200), 0);
+    }
   });
+  
   player.collides("door3", () => {
     keyPress('e', () => {
       destroy(player);
@@ -737,7 +741,12 @@ scene('building3', () => {
       go('Start2');
     });
   });
-
+    // dialoge
+  player.collides("npc", () => {
+    isInDialoge = true;
+    dialogeCheck(2);
+    player.pos = vec2(player.pos.x + 20, height() - 50);
+  });
 
 });
 
@@ -814,12 +823,17 @@ scene('building4', () => {
 
   //controls
   keyDown("left", () => {
-    player.move(-(200), 0);
+    if (isInDialoge == false) {
+      player.move(-(200), 0);
+    }
   });
 
   keyDown("right", () => {
-    player.move((200), 0);
+    if (isInDialoge == false) {
+      player.move((200), 0);
+    }
   });
+  
   player.collides("door4", () => {
     keyPress('e', () => {
       destroy(player);
@@ -827,7 +841,13 @@ scene('building4', () => {
       go('Start2');
     });
   });
-
+    // dialoge
+  player.collides("npc", () => {
+    isInDialoge = true;
+    dialogeCheck(3);
+    player.pos = vec2(player.pos.x + 20, height() - 50);
+  });
+  
 });
 
 go('Title Screen');
@@ -1028,5 +1048,59 @@ function spawnNPC(x, y, number) {
       origin('center'),
       "npc",
     ]);
+  }
+}
+
+// dialoge
+function showNextDialog(dialogeText) {
+  const dialogeBox = add([
+    rect(700, 200),
+    origin("center"),
+    pos(width() / 2, height() * (1 / 8)),
+    color(255, 255, 255),
+    outline(4),
+    "dialoge",
+  ]);
+
+  const dialoge = add([
+    text(dialogeText[talk], {
+      size: 20,
+      width: 700,
+      lineSpacing: 10,
+      font: "apl386",
+    }),
+    origin("center"),
+    pos(width() / 2, height() * (1 / 8)),
+    color(0, 0, 0),
+    "dialoge",
+  ]);
+
+  keyDown("space", () => {
+    destroyAll("dialoge");
+    talk++;
+    if (talk != dialogeText.length) {
+      setTimeout(() => {
+        showNextDialog();
+      }, 250);
+    } else {
+      isInDialoge = false;
+      talk = 0;
+    }
+  });
+}
+
+function dialogeCheck(buildingNumber) {
+  if (npcInBuilding[buildingNumber] == 'bag') {
+    const npcText1 = ["Hello! I am Bag!"];
+    showNextDialog(npcText1);
+  } else if (npcInBuilding[buildingNumber] == 'bobo') {
+    const npcText2 = ["Hello! I am Bobo!"];
+    showNextDialog(npcText2);
+  } else if (npcInBuilding[buildingNumber] == 'brock') {
+    const npcText3 = ["Hello! I am Brock!"];
+    showNextDialog(npcText3);
+  } else if (npcInBuilding[buildingNumber] == 'ghostly') {
+    const npcText4 = ["Hello! I am ghostly!"];
+    showNextDialog(npcText4);
   }
 }

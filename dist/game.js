@@ -2948,6 +2948,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var doorOpen4 = false;
   var start2Street = false;
   var policeStationOpen = false;
+  var talk = 0;
   var isInDialoge = false;
   var npcInBuilding = ["", "", "", ""];
   no({
@@ -3260,37 +3261,17 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     player.collides("pDoor", () => {
       keyPress("e", () => {
-        destroy(player);
-        policeStationOpen = true;
-        go("Start");
+        if (isInDialoge == false) {
+          destroy(player);
+          policeStationOpen = true;
+          go("Start");
+        }
       });
     });
     player.collides("officer", () => {
+      const officerText = ["Hello World! This is a test message brought to you by yours truly! Have a wonderful day!"];
       isInDialoge = true;
-      const dialogeBox = add([
-        rect(700, 200),
-        origin("center"),
-        pos(width() / 2, height() * (1 / 4) - 50),
-        color(255, 255, 255),
-        outline(4),
-        "dialoge"
-      ]);
-      const dialoge = add([
-        text("Hello World! This is a test message brought to you by yours truly! Have a wonderful day!", {
-          size: 20,
-          width: 700,
-          lineSpacing: 10,
-          font: "apl386"
-        }),
-        origin("center"),
-        pos(width() / 2, height() * (1 / 4) - 100),
-        color(0, 0, 0),
-        "dialoge"
-      ]);
-      keyDown("space", () => {
-        isInDialoge = false;
-        destroyAll("dialoge");
-      });
+      showNextDialog(officerText);
       player.pos = vec2(player.pos.x + 20, height() - 50);
     });
   });
@@ -3351,10 +3332,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       clambert.move(vectorToPlayer);
     });
     keyDown("left", () => {
-      player.move(-200, 0);
+      if (isInDialoge == false) {
+        player.move(-200, 0);
+      }
     });
     keyDown("right", () => {
-      player.move(200, 0);
+      if (isInDialoge == false) {
+        player.move(200, 0);
+      }
     });
     player.collides("door1", () => {
       keyPress("e", () => {
@@ -3362,6 +3347,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         doorOpen1 = true;
         go("Start");
       });
+    });
+    player.collides("npc", () => {
+      isInDialoge = true;
+      dialogeCheck(0);
+      player.pos = vec2(player.pos.x + 20, height() - 50);
     });
   });
   scene("building2", () => {
@@ -3421,10 +3411,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       clambert.move(vectorToPlayer);
     });
     keyDown("left", () => {
-      player.move(-200, 0);
+      if (isInDialoge == false) {
+        player.move(-200, 0);
+      }
     });
     keyDown("right", () => {
-      player.move(200, 0);
+      if (isInDialoge == false) {
+        player.move(200, 0);
+      }
     });
     player.collides("door2", () => {
       keyPress("e", () => {
@@ -3432,6 +3426,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         destroy(player);
         go("Start");
       });
+    });
+    player.collides("npc", () => {
+      isInDialoge = true;
+      dialogeCheck(1);
+      player.pos = vec2(player.pos.x + 20, height() - 50);
     });
   });
   scene("building3", () => {
@@ -3491,10 +3490,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       clambert.move(vectorToPlayer);
     });
     keyDown("left", () => {
-      player.move(-200, 0);
+      if (isInDialoge == false) {
+        player.move(-200, 0);
+      }
     });
     keyDown("right", () => {
-      player.move(200, 0);
+      if (isInDialoge == false) {
+        player.move(200, 0);
+      }
     });
     player.collides("door3", () => {
       keyPress("e", () => {
@@ -3502,6 +3505,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         doorOpen3 = true;
         go("Start2");
       });
+    });
+    player.collides("npc", () => {
+      isInDialoge = true;
+      dialogeCheck(2);
+      player.pos = vec2(player.pos.x + 20, height() - 50);
     });
   });
   scene("building4", () => {
@@ -3561,10 +3569,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       clambert.move(vectorToPlayer);
     });
     keyDown("left", () => {
-      player.move(-200, 0);
+      if (isInDialoge == false) {
+        player.move(-200, 0);
+      }
     });
     keyDown("right", () => {
-      player.move(200, 0);
+      if (isInDialoge == false) {
+        player.move(200, 0);
+      }
     });
     player.collides("door4", () => {
       keyPress("e", () => {
@@ -3572,6 +3584,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         doorOpen4 = true;
         go("Start2");
       });
+    });
+    player.collides("npc", () => {
+      isInDialoge = true;
+      dialogeCheck(3);
+      player.pos = vec2(player.pos.x + 20, height() - 50);
     });
   });
   go("Title Screen");
@@ -3768,5 +3785,56 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
   }
   __name(spawnNPC, "spawnNPC");
+  function showNextDialog(dialogeText) {
+    const dialogeBox = add([
+      rect(700, 200),
+      origin("center"),
+      pos(width() / 2, height() * (1 / 8)),
+      color(255, 255, 255),
+      outline(4),
+      "dialoge"
+    ]);
+    const dialoge = add([
+      text(dialogeText[talk], {
+        size: 20,
+        width: 700,
+        lineSpacing: 10,
+        font: "apl386"
+      }),
+      origin("center"),
+      pos(width() / 2, height() * (1 / 8)),
+      color(0, 0, 0),
+      "dialoge"
+    ]);
+    keyDown("space", () => {
+      destroyAll("dialoge");
+      talk++;
+      if (talk != dialogeText.length) {
+        setTimeout(() => {
+          showNextDialog();
+        }, 250);
+      } else {
+        isInDialoge = false;
+        talk = 0;
+      }
+    });
+  }
+  __name(showNextDialog, "showNextDialog");
+  function dialogeCheck(buildingNumber) {
+    if (npcInBuilding[buildingNumber] == "bag") {
+      const npcText1 = ["Hello! I am Bag!"];
+      showNextDialog(npcText1);
+    } else if (npcInBuilding[buildingNumber] == "bobo") {
+      const npcText2 = ["Hello! I am Bobo!"];
+      showNextDialog(npcText2);
+    } else if (npcInBuilding[buildingNumber] == "brock") {
+      const npcText3 = ["Hello! I am Brock!"];
+      showNextDialog(npcText3);
+    } else if (npcInBuilding[buildingNumber] == "ghostly") {
+      const npcText4 = ["Hello! I am ghostly!"];
+      showNextDialog(npcText4);
+    }
+  }
+  __name(dialogeCheck, "dialogeCheck");
 })();
 //# sourceMappingURL=game.js.map
