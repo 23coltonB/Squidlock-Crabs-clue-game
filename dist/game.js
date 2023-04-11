@@ -2947,7 +2947,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var doorOpen3 = false;
   var doorOpen4 = false;
   var flowerShopOpen = false;
+  var abandondDoor = false;
+  var insideAlley = false;
   var start2Street = false;
+  var start3Street = false;
   var policeStationOpen = false;
   var talk = 0;
   var isInDialoge = false;
@@ -2963,6 +2966,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("ghosty", "sprites/ghosty.png");
   loadSprite("brock", "sprites/brock.png");
   loadSprite("bobo", "sprites/bobo.png");
+  loadSprite("onion", "sprites/onion.png");
   scene("Title Screen", () => {
     add([
       rect(width(), height()),
@@ -3063,10 +3067,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       }
     });
     keyDown("left", () => {
-      player.move(-200, 0);
+      player.move(-300, 0);
     });
     keyDown("right", () => {
-      player.move(200, 0);
+      player.move(300, 0);
     });
     player.collides("door1", () => {
       keyPress("e", () => {
@@ -3104,17 +3108,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       solid(),
       color(50.2, 50.2, 50.2)
     ]);
-    add([
-      rect(20, height()),
-      origin("botright"),
-      pos(width(), height() - 20),
-      area(),
-      solid(),
-      color(36, 36, 36)
-    ]);
     const door3 = add([
       sprite("door"),
-      pos(width() * 1 / 4, height() - 50),
+      pos(width() * 1 / 8, height() - 50),
       area(),
       origin("center"),
       "door3"
@@ -3132,6 +3128,13 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       area(),
       origin("center"),
       "flowerShop"
+    ]);
+    const alleyWay = add([
+      sprite("door"),
+      pos(width() * 3 / 8 + 100, height() - 50),
+      area(),
+      origin("center"),
+      "alley"
     ]);
     const player = add([
       sprite("bean"),
@@ -3152,8 +3155,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     player.action(() => {
       if (doorOpen3 == true) {
-        player.pos = vec2(width() * 1 / 4, height() - 50);
-        clambert.pos = vec2(width() * 1 / 4, height() - 50);
+        player.pos = vec2(width() * 1 / 8, height() - 50);
+        clambert.pos = vec2(width() * 1 / 8, height() - 50);
         doorOpen3 = false;
       } else if (doorOpen4 == true) {
         player.pos = vec2(width() * 7 / 8, height() - 50);
@@ -3163,16 +3166,28 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         player.pos = vec2(width() * 5 / 8, height() - 50);
         clambert.pos = vec2(width() * 5 / 8, height() - 50);
         flowerShopOpen = false;
+      } else if (insideAlley == true) {
+        player.pos = vec2(width() * 3 / 8 + 100, height() - 50);
+        clambert.pos = vec2(width() * 3 / 8 + 100, height() - 50);
+        insideAlley = false;
+      } else if (start3Street == true) {
+        player.pos = vec2(width() - 50, height() - 50);
+        clambert.pos = vec2(width() - 50, height() - 50);
+        start3Street = false;
       }
       if (player.pos.x <= 0) {
         go("Start");
       }
+      if (player.pos.x >= width()) {
+        start3Street = true;
+        go("Start3");
+      }
     });
     keyDown("left", () => {
-      player.move(-200, 0);
+      player.move(-300, 0);
     });
     keyDown("right", () => {
-      player.move(200, 0);
+      player.move(300, 0);
     });
     player.collides("door3", () => {
       keyPress("e", () => {
@@ -3180,6 +3195,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         doorOpen3 = true;
         doorOpen4 = false;
         flowerShopOpen = false;
+        insideAlley = false;
         go("building3");
       });
     });
@@ -3189,6 +3205,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         doorOpen4 = true;
         doorOpen3 = false;
         flowerShopOpen = false;
+        insideAlley = false;
         go("building4");
       });
     });
@@ -3198,7 +3215,228 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         doorOpen4 = false;
         doorOpen3 = false;
         flowerShopOpen = true;
+        insideAlley = false;
         go("flowerShopBuilding");
+      });
+    });
+    player.collides("alley", () => {
+      keyPress("e", () => {
+        destroy(player);
+        doorOpen3 = true;
+        doorOpen4 = false;
+        flowerShopOpen = false;
+        insideAlley = false;
+        go("alleyway");
+      });
+    });
+  });
+  scene("Start3", () => {
+    add([
+      rect(width(), 20),
+      outline(4),
+      pos(0, height()),
+      origin("botleft"),
+      area(),
+      solid(),
+      color(50.2, 50.2, 50.2)
+    ]);
+    add([
+      rect(20, height()),
+      origin("botright"),
+      pos(width(), height() - 20),
+      area(),
+      solid(),
+      color(36, 36, 36)
+    ]);
+    const abandondD = add([
+      sprite("door"),
+      pos(width() * 1 / 2 - 50, height() - 50),
+      area(),
+      origin("center"),
+      "edgeDoor"
+    ]);
+    const player = add([
+      sprite("bean"),
+      pos(10, height() - 40),
+      area(),
+      origin("topleft"),
+      body()
+    ]);
+    const clambert = add([
+      sprite("butterfly"),
+      pos(15, height() - 200),
+      area(),
+      scale(3 / 8)
+    ]);
+    clambert.action(() => {
+      const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
+      clambert.move(vectorToPlayer);
+    });
+    keyDown("left", () => {
+      player.move(-300, 0);
+    });
+    keyDown("right", () => {
+      player.move(300, 0);
+    });
+    player.action(() => {
+      if (abandondDoor == true) {
+        player.pos = vec2(width() * 1 / 2 - 50, height() - 50);
+        clambert.pos = vec2(width() * 1 / 2 - 50, height() - 50);
+        abandondDoor = false;
+      }
+      if (player.pos.x <= 0) {
+        go("Start2");
+      }
+    });
+    player.collides("edgeDoor", () => {
+      keyPress("e", () => {
+        destroy(player);
+        abandondDoor = true;
+        go("abandond_Building");
+      });
+    });
+  });
+  scene("abandond_Building", () => {
+    add([
+      rect(width() - 500, height() * 3 / 4 + height() / 2),
+      pos(width() / 2, height() - 50),
+      origin("center"),
+      area(),
+      color(5, 5, 5)
+    ]);
+    add([
+      rect(20, height()),
+      pos(width() * 1 / 8, 0),
+      area(),
+      solid(),
+      color(36, 36, 36)
+    ]);
+    add([
+      rect(20, height()),
+      pos(width() * (7 / 8) - 20, 0),
+      area(),
+      solid(),
+      color(36, 36, 36)
+    ]);
+    add([
+      rect(width(), 20),
+      outline(4),
+      pos(0, height()),
+      origin("botleft"),
+      area(),
+      solid(),
+      color(50.2, 50.2, 50.2)
+    ]);
+    const abandondD = add([
+      sprite("door"),
+      pos(width() * 1 / 2 - 50, height() - 50),
+      area(),
+      origin("center"),
+      "edgeDoor"
+    ]);
+    const player = add([
+      sprite("bean"),
+      pos(width() * 1 / 2 - 50, height() - 50),
+      area(),
+      origin("center"),
+      body()
+    ]);
+    const clambert = add([
+      sprite("butterfly"),
+      pos(width() * 1 / 2 - 50, height() - 50),
+      origin("center"),
+      area(),
+      scale(3 / 8)
+    ]);
+    clambert.action(() => {
+      const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
+      clambert.move(vectorToPlayer);
+    });
+    keyDown("left", () => {
+      player.move(-300, 0);
+    });
+    keyDown("right", () => {
+      player.move(300, 0);
+    });
+    player.collides("edgeDoor", () => {
+      keyPress("e", () => {
+        if (isInDialoge == false) {
+          destroy(player);
+          abandondDoor = true;
+          go("Start3");
+        }
+      });
+    });
+  });
+  scene("alleyway", () => {
+    add([
+      rect(width() - 1 / 9, height() - 1 / 9),
+      pos(width() / 2, height() - 50),
+      origin("center"),
+      area(),
+      color(5, 5, 5)
+    ]);
+    add([
+      rect(20, height()),
+      pos(0, 0),
+      area(),
+      solid(),
+      color(36, 36, 36)
+    ]);
+    add([
+      rect(20, height()),
+      pos(width(), 0),
+      area(),
+      solid(),
+      color(36, 36, 36)
+    ]);
+    add([
+      rect(width(), 20),
+      outline(4),
+      pos(0, height()),
+      origin("botleft"),
+      area(),
+      solid(),
+      color(50.2, 50.2, 50.2)
+    ]);
+    const alleyWay = add([
+      sprite("door"),
+      pos(width() * 1 / 9 - 100, height() - 50),
+      area(),
+      origin("center"),
+      "alley"
+    ]);
+    const player = add([
+      sprite("bean"),
+      pos(width() * 1 / 9 - 100, height() - 50),
+      area(),
+      origin("center"),
+      body()
+    ]);
+    const clambert = add([
+      sprite("butterfly"),
+      pos(width() * 1 / 9 - 100, height() - 50),
+      origin("center"),
+      area(),
+      scale(3 / 8)
+    ]);
+    clambert.action(() => {
+      const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
+      clambert.move(vectorToPlayer);
+    });
+    keyDown("left", () => {
+      player.move(-300, 0);
+    });
+    keyDown("right", () => {
+      player.move(300, 0);
+    });
+    player.collides("alley", () => {
+      keyPress("e", () => {
+        if (isInDialoge == false) {
+          destroy(player);
+          insideAlley = true;
+          go("Start2");
+        }
       });
     });
   });
@@ -3267,12 +3505,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     keyDown("left", () => {
       if (isInDialoge == false) {
-        player.move(-200, 0);
+        player.move(-300, 0);
       }
     });
     keyDown("right", () => {
       if (isInDialoge == false) {
-        player.move(200, 0);
+        player.move(300, 0);
       }
     });
     player.collides("pDoor", () => {
@@ -3349,12 +3587,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     keyDown("left", () => {
       if (isInDialoge == false) {
-        player.move(-200, 0);
+        player.move(-300, 0);
       }
     });
     keyDown("right", () => {
       if (isInDialoge == false) {
-        player.move(200, 0);
+        player.move(300, 0);
       }
     });
     player.collides("door1", () => {
@@ -3428,12 +3666,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     keyDown("left", () => {
       if (isInDialoge == false) {
-        player.move(-200, 0);
+        player.move(-300, 0);
       }
     });
     keyDown("right", () => {
       if (isInDialoge == false) {
-        player.move(200, 0);
+        player.move(300, 0);
       }
     });
     player.collides("door2", () => {
@@ -3507,12 +3745,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     keyDown("left", () => {
       if (isInDialoge == false) {
-        player.move(-200, 0);
+        player.move(-300, 0);
       }
     });
     keyDown("right", () => {
       if (isInDialoge == false) {
-        player.move(200, 0);
+        player.move(300, 0);
       }
     });
     player.collides("door3", () => {
@@ -3586,12 +3824,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     keyDown("left", () => {
       if (isInDialoge == false) {
-        player.move(-200, 0);
+        player.move(-300, 0);
       }
     });
     keyDown("right", () => {
       if (isInDialoge == false) {
-        player.move(200, 0);
+        player.move(300, 0);
       }
     });
     player.collides("door4", () => {
@@ -3652,6 +3890,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       origin("center"),
       body()
     ]);
+    const shopKeeper = add([
+      sprite("onion"),
+      origin("center"),
+      pos(width() * (1 / 4), height() - 50),
+      area(),
+      body(),
+      "shop keeper"
+    ]);
     const clambert = add([
       sprite("butterfly"),
       pos(width() * 5 / 8, height() - 50),
@@ -3664,12 +3910,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     keyDown("left", () => {
       if (isInDialoge == false) {
-        player.move(-200, 0);
+        player.move(-300, 0);
       }
     });
     keyDown("right", () => {
       if (isInDialoge == false) {
-        player.move(200, 0);
+        player.move(300, 0);
       }
     });
     player.collides("flowerShop", () => {
@@ -3678,6 +3924,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         flowerDoor = true;
         go("Start2");
       });
+    });
+    player.collides("shop keeper", () => {
+      const shopKeeperSpeech = ["I am Onion! The keeper of this flower shop!"];
+      isInDialoge = true;
+      showNextDialog(shopKeeperSpeech);
+      player.pos = vec2(player.pos.x + 20, height() - 50);
     });
   });
   go("Title Screen");
