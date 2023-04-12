@@ -67,7 +67,7 @@ loadSprite("bobo", "sprites/bobo.png");
 
 //other NPC
 loadSprite("onion", "sprites/onion.png");
-
+loadSprite("gigagantrum", "sprites/gigagantrum.png");
 //sounds/music loading
 
 
@@ -269,7 +269,7 @@ scene('Start2', () => {
 
   const alleyWay = add([
     sprite('door'),
-    pos((width() * 3/8) + 100, height() - 50),
+    pos((width() * 3 / 8) + 100, height() - 50),
     area(),
     origin('center'),
     'alley',
@@ -306,15 +306,15 @@ scene('Start2', () => {
       player.pos = vec2(width() * 7 / 8, height() - 50);
       clambert.pos = vec2(width() * 7 / 8, height() - 50);
       doorOpen4 = false;
-    }else if (flowerShopOpen == true){
+    } else if (flowerShopOpen == true) {
       player.pos = vec2(width() * 5 / 8, height() - 50);
       clambert.pos = vec2(width() * 5 / 8, height() - 50);
       flowerShopOpen = false;
-    }else if (insideAlley == true){
-      player.pos = vec2((width() * 3/8) + 100, height() - 50);
-      clambert.pos = vec2((width() * 3/8) + 100, height() - 50);
+    } else if (insideAlley == true) {
+      player.pos = vec2((width() * 3 / 8) + 100, height() - 50);
+      clambert.pos = vec2((width() * 3 / 8) + 100, height() - 50);
       insideAlley = false;
-    }else if(start3Street == true){
+    } else if (start3Street == true) {
       player.pos = vec2(width() - 50, height() - 50);
       clambert.pos = vec2(width() - 50, height() - 50);
       start3Street = false; // add this line to set start2Street to false
@@ -323,7 +323,7 @@ scene('Start2', () => {
     if (player.pos.x <= 0) {
       go('Start');
     }
-    if (player.pos.x >= width()){
+    if (player.pos.x >= width()) {
       start3Street = true;
       go('Start3');
     }
@@ -369,7 +369,7 @@ scene('Start2', () => {
       go('flowerShopBuilding');
     });
   });
-    player.collides("alley", () => {
+  player.collides("alley", () => {
     keyPress('e', () => {
       destroy(player);
       doorOpen3 = true; // set doorOpen3 to true
@@ -382,8 +382,8 @@ scene('Start2', () => {
   //
 });
 
-scene ('Start3', () => {
-    add([
+scene('Start3', () => {
+  add([
     rect(width(), 20),
     outline(4),
     pos(0, height()),
@@ -409,13 +409,13 @@ scene ('Start3', () => {
   // sprite
   const abandondD = add([
     sprite('door'),
-    pos((width() * 1/2) -50, height() - 50),
+    pos((width() * 1 / 2) - 50, height() - 50),
     area(),
     origin('center'),
     'edgeDoor',
   ]);
-  
-   const player = add([
+
+  const player = add([
     sprite("bean"),
     pos(10, height() - 40),
     area(),
@@ -435,7 +435,7 @@ scene ('Start3', () => {
     const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
     clambert.move(vectorToPlayer);
   });
-    //controls
+  //controls
   keyDown("left", () => {
     player.move(-(300), 0);
   });
@@ -445,24 +445,24 @@ scene ('Start3', () => {
   });
   // player movement
   player.action(() => {
-    if (abandondDoor == true){
-      player.pos = vec2((width() * 1/2) -50, height() - 50);
-      clambert.pos = vec2((width() * 1/2) -50, height() - 50);
+    if (abandondDoor == true) {
+      player.pos = vec2((width() * 1 / 2) - 50, height() - 50);
+      clambert.pos = vec2((width() * 1 / 2) - 50, height() - 50);
       abandondDoor = false;
     }
-    if (player.pos.x <= 0){
+    if (player.pos.x <= 0) {
       go('Start2');
     }
   });
   //
-    player.collides("edgeDoor", () => {
+  player.collides("edgeDoor", () => {
     keyPress('e', () => {
       destroy(player);
       abandondDoor = true;
       go('abandond_Building');
     });
   });
-  
+
 });
 
 scene('abandond_Building', () => {
@@ -505,14 +505,24 @@ scene('abandond_Building', () => {
   //sprite
   const abandondD = add([
     sprite('door'),
-    pos((width() * 1/2) -50, height() - 50),
+    pos((width() * 1 / 2) - 50, height() - 50),
     area(),
     origin('center'),
     'edgeDoor',
   ]);
+
+  const hobo = add([
+    sprite('gigagantrum'),
+    pos(width() / 3, height() - 50),
+    area(),
+    origin('center'),
+    body(),
+    "npc",
+  ]);
+
   const player = add([
     sprite("bean"),
-    pos((width() * 1/2) -50, height() - 50),
+    pos((width() * 1 / 2) - 50, height() - 50),
     area(),
     origin('center'),
     body(),
@@ -521,7 +531,7 @@ scene('abandond_Building', () => {
   //clambert ai
   const clambert = add([
     sprite("butterfly"),
-    pos((width() * 1/2) -50, height() - 50),
+    pos((width() * 1 / 2) - 50, height() - 50),
     origin('center'),
     area(),
     scale(3 / 8),
@@ -531,16 +541,19 @@ scene('abandond_Building', () => {
     const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
     clambert.move(vectorToPlayer);
   });
-  //control
-    //controls
+  //controls
   keyDown("left", () => {
-    player.move(-(300), 0);
+    if (isInDialoge == false) {
+      player.move(-(300), 0);
+    }
   });
 
   keyDown("right", () => {
-    player.move((300), 0);
+    if (isInDialoge == false) {
+      player.move((300), 0);
+    }
   });
-    player.collides("edgeDoor", () => {
+  player.collides("edgeDoor", () => {
     keyPress('e', () => {
       if (isInDialoge == false) {
         destroy(player);
@@ -549,11 +562,19 @@ scene('abandond_Building', () => {
       }
     });
   });
+  //dialoge
+  player.collides("npc", () => {
+    const hoboText = ["Hello! I am Gigagantrum, the local neighborhood hobo, living in this abandond building."];
+    isInDialoge = true;
+    showNextDialog(hoboText);
+    player.pos = vec2(player.pos.x + 20, height() - 50);
+  });
+  //
 });
 
 scene('alleyway', () => {
   add([
-    rect(width() - 1/9, height() - 1/9),
+    rect(width() - 1 / 9, height() - 1 / 9),
     pos((width() / 2), (height() - 50)),
     origin("center"),
     area(),
@@ -591,14 +612,14 @@ scene('alleyway', () => {
   //sprites
   const alleyWay = add([
     sprite('door'),
-    pos(width() * 1/9 - 100, height() - 50),
+    pos(width() * 1 / 9 - 100, height() - 50),
     area(),
     origin('center'),
     'alley',
   ]);
-   const player = add([
+  const player = add([
     sprite("bean"),
-    pos(width() * 1/9 - 100, height() - 50),
+    pos(width() * 1 / 9 - 100, height() - 50),
     area(),
     origin('center'),
     body(),
@@ -607,7 +628,7 @@ scene('alleyway', () => {
   //clambert ai
   const clambert = add([
     sprite("butterfly"),
-    pos(width() * 1/9 - 100, height() - 50),
+    pos(width() * 1 / 9 - 100, height() - 50),
     origin('center'),
     area(),
     scale(3 / 8),
@@ -618,7 +639,7 @@ scene('alleyway', () => {
     clambert.move(vectorToPlayer);
   });
   //control
-    //controls
+  //controls
   keyDown("left", () => {
     player.move(-(300), 0);
   });
@@ -626,7 +647,7 @@ scene('alleyway', () => {
   keyDown("right", () => {
     player.move((300), 0);
   });
-    player.collides("alley", () => {
+  player.collides("alley", () => {
     keyPress('e', () => {
       if (isInDialoge == false) {
         destroy(player);
@@ -832,7 +853,7 @@ scene('building1', () => {
       player.move((300), 0);
     }
   });
-  
+
   player.collides("door1", () => {
     keyPress('e', () => {
       destroy(player);
@@ -934,7 +955,7 @@ scene('building2', () => {
       player.move((300), 0);
     }
   });
-  
+
   player.collides('door2', () => {
     keyPress('e', () => {
       doorOpen2 = true;
@@ -942,7 +963,7 @@ scene('building2', () => {
       go('Start');
     });
   });
-    // dialoge
+  // dialoge
   player.collides("npc", () => {
     isInDialoge = true;
     dialogeCheck(1);
@@ -1034,7 +1055,7 @@ scene('building3', () => {
       player.move((300), 0);
     }
   });
-  
+
   player.collides("door3", () => {
     keyPress('e', () => {
       destroy(player);
@@ -1042,7 +1063,7 @@ scene('building3', () => {
       go('Start2');
     });
   });
-    // dialoge
+  // dialoge
   player.collides("npc", () => {
     isInDialoge = true;
     dialogeCheck(2);
@@ -1134,7 +1155,7 @@ scene('building4', () => {
       player.move((300), 0);
     }
   });
-  
+
   player.collides("door4", () => {
     keyPress('e', () => {
       destroy(player);
@@ -1142,16 +1163,16 @@ scene('building4', () => {
       go('Start2');
     });
   });
-    // dialoge
+  // dialoge
   player.collides("npc", () => {
     isInDialoge = true;
     dialogeCheck(3);
     player.pos = vec2(player.pos.x + 20, height() - 50);
   });
-  
+
 });
 
-scene('flowerShopBuilding', () =>{
+scene('flowerShopBuilding', () => {
   add([
     rect(width() - 500, height() * 3 / 4 + (height() / 2)),
     pos((width() / 2), (height() - 50)),
@@ -1198,7 +1219,7 @@ scene('flowerShopBuilding', () =>{
     origin("center"),
     "flowerShop",
   ]);
-  
+
   const player = add([
     sprite("bean"),
     pos(width() * 5 / 8, height() - 50),
@@ -1210,7 +1231,7 @@ scene('flowerShopBuilding', () =>{
   const shopKeeper = add([
     sprite('onion'),
     origin('center'),
-    pos(width() * (1/4), height() - 50),
+    pos(width() * (1 / 4), height() - 50),
     area(),
     body(),
     "shop keeper",
@@ -1241,7 +1262,7 @@ scene('flowerShopBuilding', () =>{
       player.move((300), 0);
     }
   });
-   player.collides("flowerShop", () => {
+  player.collides("flowerShop", () => {
     keyPress('e', () => {
       destroy(player);
       flowerDoor = true; // set flowerDoor to true

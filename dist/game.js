@@ -2967,6 +2967,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("brock", "sprites/brock.png");
   loadSprite("bobo", "sprites/bobo.png");
   loadSprite("onion", "sprites/onion.png");
+  loadSprite("gigagantrum", "sprites/gigagantrum.png");
   scene("Title Screen", () => {
     add([
       rect(width(), height()),
@@ -3334,6 +3335,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       origin("center"),
       "edgeDoor"
     ]);
+    const hobo = add([
+      sprite("gigagantrum"),
+      pos(width() / 3, height() - 50),
+      area(),
+      origin("center"),
+      body(),
+      "npc"
+    ]);
     const player = add([
       sprite("bean"),
       pos(width() * 1 / 2 - 50, height() - 50),
@@ -3353,10 +3362,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       clambert.move(vectorToPlayer);
     });
     keyDown("left", () => {
-      player.move(-300, 0);
+      if (isInDialoge == false) {
+        player.move(-300, 0);
+      }
     });
     keyDown("right", () => {
-      player.move(300, 0);
+      if (isInDialoge == false) {
+        player.move(300, 0);
+      }
     });
     player.collides("edgeDoor", () => {
       keyPress("e", () => {
@@ -3366,6 +3379,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
           go("Start3");
         }
       });
+    });
+    player.collides("npc", () => {
+      const hoboText = ["Hello! I am Gigagantrum, the local neighborhood hobo, living in this abandond building."];
+      isInDialoge = true;
+      showNextDialog(hoboText);
+      player.pos = vec2(player.pos.x + 20, height() - 50);
     });
   });
   scene("alleyway", () => {
