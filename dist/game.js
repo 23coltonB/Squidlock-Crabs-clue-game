@@ -2955,6 +2955,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var talk = 0;
   var isInDialoge = false;
   var npcInBuilding = ["", "", "", ""];
+  var furniture1 = [false, false, false, false, false, false, false, false, false, false];
+  var furniture2 = [false, false, false, false, false, false, false, false, false, false];
+  var furniture3 = [false, false, false, false, false, false, false, false, false, false];
+  var furniture4 = [false, false, false, false, false, false, false, false, false, false];
+  var spawned = [false, false, false, false, false, false, false, false, false, false];
   no({
     background: [36, 36, 36]
   });
@@ -2968,6 +2973,16 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("bobo", "sprites/bobo.png");
   loadSprite("onion", "sprites/onion.png");
   loadSprite("gigagantrum", "sprites/gigagantrum.png");
+  loadSprite("apple", "sprites/apple.png");
+  loadSprite("meat", "sprites/meat.png");
+  loadSprite("lemon", "sprites/lemon.png");
+  loadSprite("boom", "sprites/boom.png");
+  loadSprite("heart", "sprites/heart.png");
+  loadSprite("egg_crack", "sprites/egg_crack.png");
+  loadSprite("egg", "sprites/egg.png");
+  loadSprite("coin", "sprites/coin.png");
+  loadSprite("circle", "sprites/circle.png");
+  loadSprite("grass", "sprites/grass.png");
   scene("Title Screen", () => {
     add([
       rect(width(), height()),
@@ -3009,6 +3024,12 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     ]);
     for (var i2 = 0; i2 <= 3; i2++) {
       addRandomNPCToScene(-1e3, -1e3, i2);
+    }
+    if (furniture1[0] == false && furniture1[1] == false && furniture1[2] == false && furniture1[3] == false && furniture1[4] == false && furniture1[5] == false && furniture1[6] == false && furniture1[7] == false && furniture1[8] == false && furniture1[9] == false) {
+      randomEnviornment(furniture1);
+      randomEnviornment(furniture2);
+      randomEnviornment(furniture3);
+      randomEnviornment(furniture4);
     }
     const policeDoor = add([
       sprite("door"),
@@ -3580,6 +3601,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       color(50.2, 50.2, 50.2)
     ]);
     addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 0);
+    spawnEnviornment(furniture1);
     const door1 = add([
       sprite("door"),
       pos(width() * 2 / 4, height() - 50),
@@ -3617,6 +3639,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     player.collides("door1", () => {
       keyPress("e", () => {
         destroy(player);
+        destroyAll("furniture");
         doorOpen1 = true;
         go("Start");
       });
@@ -4196,5 +4219,154 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
   }
   __name(dialogeCheck, "dialogeCheck");
+  function randomEnviornment(furniture) {
+    for (var i2 = 0; i2 < 3; i2++) {
+      var randInt = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+      if (randInt == 1 && furniture[0] == false) {
+        console.log("chair selected");
+        furniture[0] = true;
+      } else if (randInt == 2 && furniture[1] == false) {
+        console.log("Mirror selected");
+        furniture[1] = true;
+      } else if (randInt == 3 && furniture[2] == false) {
+        console.log("large dresser selected");
+        furniture[2] = true;
+      } else if (randInt == 4 && furniture[3] == false) {
+        console.log("short dresser selected");
+        furniture[3] = true;
+      } else if (randInt == 5 && furniture[4] == false) {
+        console.log("desk selected");
+        furniture[4] = true;
+      } else if (randInt == 6 && furniture[5] == false) {
+        console.log("love seat selected");
+        furniture[5] = true;
+      } else if (randInt == 7 && furniture[6] == false) {
+        console.log("cabinet selected");
+        furniture[6] = true;
+      } else if (randInt == 8 && furniture[7] == false) {
+        console.log("coffee table selected");
+        furniture[7] = true;
+      } else if (randInt == 9 && furniture[8] == false) {
+        console.log("side table selected");
+        furniture[8] = true;
+      } else if (randInt == 10 && furniture[9] == false) {
+        console.log('"flowers" selected');
+        furniture[9] = true;
+      } else {
+        i2--;
+        console.log("Error: enviornment item already selected, selecting another one");
+      }
+    }
+  }
+  __name(randomEnviornment, "randomEnviornment");
+  function spawnEnviornment(furniture) {
+    for (var i2 = 0; i2 < 3; i2++) {
+      var randomPosW = Math.floor(Math.random() * (width() * (5 / 8) - (width() / 4 + 25) + 1)) + (width() / 4 + 25);
+      var randomPosH = height() - 50;
+      if (furniture[0] == true && spawned[0] == false) {
+        console.log("chair spawned");
+        const chair = add([
+          sprite("apple"),
+          origin("center"),
+          pos(randomPosW, randomPosH),
+          area(),
+          "furniture"
+        ]);
+        spawned[0] = true;
+      } else if (furniture[1] == true && spawned[1] == false) {
+        console.log("Mirror spawned");
+        const mirror = add([
+          sprite("meat"),
+          origin("center"),
+          pos(randomPosW, randomPosH),
+          area(),
+          "furniture"
+        ]);
+        spawned[1] = true;
+      } else if (furniture[2] == true && spawned[2] == false) {
+        console.log("large dresser spawned");
+        const largeDresser = add([
+          sprite("boom"),
+          origin("center"),
+          pos(randomPosW, randomPosH),
+          area(),
+          "furniture"
+        ]);
+        spawned[2] = true;
+      } else if (furniture[3] == true && spawned[3] == false) {
+        console.log("short dresser spawned");
+        const smallDresser = add([
+          sprite("lemon"),
+          origin("center"),
+          pos(randomPosW, randomPosH),
+          area(),
+          "furniture"
+        ]);
+        spawned[3] = true;
+      } else if (furniture[4] == true && spawned[4] == false) {
+        console.log("desk spawned");
+        const desk = add([
+          sprite("heart"),
+          origin("center"),
+          pos(randomPosW, randomPosH),
+          area(),
+          "furniture"
+        ]);
+        spawned[4] = true;
+      } else if (furniture[5] == true && spawned[5] == false) {
+        console.log("love seat spawned");
+        const loveSeat = add([
+          sprite("egg_crack"),
+          origin("center"),
+          pos(randomPosW, randomPosH),
+          area(),
+          "furniture"
+        ]);
+        spawned[5] = true;
+      } else if (furniture[6] == true && spawned[6] == false) {
+        console.log("cabinet spawned");
+        const cabinet = add([
+          sprite("egg"),
+          origin("center"),
+          pos(randomPosW, randomPosH),
+          area(),
+          "furniture"
+        ]);
+        spawned[6] = true;
+      } else if (furniture[7] == true && spawned[7] == false) {
+        console.log("coffee table spawned");
+        const coffeeTable = add([
+          sprite("coin"),
+          origin("center"),
+          pos(randomPosW, randomPosH),
+          area(),
+          "furniture"
+        ]);
+        spawned[7] = true;
+      } else if (furniture[8] == true && spawned[8] == false) {
+        console.log("side table spawned");
+        const sideTable = add([
+          sprite("circle"),
+          origin("center"),
+          pos(randomPosW, randomPosH),
+          area(),
+          "furniture"
+        ]);
+        spawned[8] = true;
+      } else if (furniture[9] == true && spawned[9] == false) {
+        console.log('"flowers" spawned');
+        const flowers = add([
+          sprite("grass"),
+          origin("center"),
+          pos(randomPosW, randomPosH),
+          area(),
+          "furniture"
+        ]);
+        spawned[9] = true;
+      }
+    }
+    spawned = [false, false, false, false, false, false, false, false, false, false];
+  }
+  __name(spawnEnviornment, "spawnEnviornment");
 })();
 //# sourceMappingURL=game.js.map
