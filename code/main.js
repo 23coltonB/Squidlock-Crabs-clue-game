@@ -50,6 +50,10 @@ var furniture2 = [false, false, false, false, false, false, false, false, false,
 var furniture3 = [false, false, false, false, false, false, false, false, false, false];
 var furniture4 = [false, false, false, false, false, false, false, false, false, false];
 var spawned = [false, false, false, false, false, false, false, false, false, false];
+var spawnedLocation = [0, 0, 0];
+var spawnedLocation1 = [0, 0, 0];
+var spawnedLocation2 = [0, 0, 0];
+var spawnedLocation3 = [0, 0, 0];
 
 
 // initialize context
@@ -58,7 +62,6 @@ kaboom({
 });
 
 // load assets
-
 loadSprite("bean", "sprites/bean.png")
 loadSprite("door", "sprites/door.png");
 loadSprite("butterfly", "sprites/butterfly.png");
@@ -145,113 +148,113 @@ scene('Start', () => {
   }
   //furniture initialization
   if (furniture1[0] == false && furniture1[1] == false && furniture1[2] == false && furniture1[3] == false && furniture1[4] == false && furniture1[5] == false && furniture1[6] == false && furniture1[7] == false && furniture1[8] == false && furniture1[9] == false) {
-  randomEnviornment(furniture1);
-  randomEnviornment(furniture2);
-  randomEnviornment(furniture3);
-  randomEnviornment(furniture4);
-}
+    randomEnviornment(furniture1, spawnedLocation);
+    randomEnviornment(furniture2, spawnedLocation1);
+    randomEnviornment(furniture3, spawnedLocation2);
+    randomEnviornment(furniture4, spawnedLocation3);
+  }
   //everything else
   const policeDoor = add([
-  sprite('door'),
-  pos(50, height() - 50),
-  area(),
-  origin("center"),
-  "pDoor",
-]);
+    sprite('door'),
+    pos(50, height() - 50),
+    area(),
+    origin("center"),
+    "pDoor",
+  ]);
 
-const door1 = add([
-  sprite('door'),
-  pos(width() * 3 / 4, height() - 50),
-  area(),
-  origin("center"),
-  "door1",
-]);
+  const door1 = add([
+    sprite('door'),
+    pos(width() * 3 / 4, height() - 50),
+    area(),
+    origin("center"),
+    "door1",
+  ]);
 
-const door2 = add([
-  sprite('door'),
-  pos(width() * 2 / 4, height() - 50),
-  area(),
-  origin("center"),
-  "door2",
-]);
-const player = add([
-  sprite("bean"),
-  pos(10, height() - 40),
-  area(),
-  origin('topleft'),
-  body(),
-]);
+  const door2 = add([
+    sprite('door'),
+    pos(width() * 2 / 4, height() - 50),
+    area(),
+    origin("center"),
+    "door2",
+  ]);
+  const player = add([
+    sprite("bean"),
+    pos(10, height() - 40),
+    area(),
+    origin('topleft'),
+    body(),
+  ]);
 
-//clambert ai
-const clambert = add([
-  sprite("butterfly"),
-  pos(15, height() - 200),
-  area(),
-  scale(3 / 8),
-]);
+  //clambert ai
+  const clambert = add([
+    sprite("butterfly"),
+    pos(15, height() - 200),
+    area(),
+    scale(3 / 8),
+  ]);
 
-clambert.action(() => {
-  const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
-  clambert.move(vectorToPlayer);
-});
-
-// move player and Clambert if door is open
-player.action(() => {
-  if (doorOpen1 == true) {
-    player.pos = vec2(width() * 3 / 4, height() - 50);
-    clambert.pos = vec2(width() * 3 / 4, height() - 50);
-    doorOpen1 = false;
-  } else if (doorOpen2 == true) {
-    player.pos = vec2(width() * 2 / 4, height() - 50);
-    clambert.pos = vec2(width() * 2 / 4, height() - 50);
-    doorOpen2 = false;
-  } else if (start2Street == true) {
-    player.pos = vec2(width() - 50, height() - 50);
-    clambert.pos = vec2(width() - 50, height() - 50);
-    start2Street = false; // add this line to set start2Street to false
-  }
-
-  if (player.pos.x >= width()) {
-    start2Street = true;
-    go('Start2');
-  }
-});
-
-//controls
-keyDown("left", () => {
-  player.move(-(300), 0);
-});
-
-keyDown("right", () => {
-  player.move((300), 0);
-});
-player.collides("door1", () => {
-  keyPress('e', () => {
-    destroy(player);
-    doorOpen1 = true; // set doorOpen1 to true
-    doorOpen2 = false;
-    go('building1');
+  clambert.action(() => {
+    const vectorToPlayer = vec2(player.pos).sub(clambert.pos);
+    clambert.move(vectorToPlayer);
   });
-});
 
-player.collides("door2", () => {
-  keyPress('e', () => {
-    destroy(player);
-    doorOpen2 = true; // set doorOpen2 to true
-    doorOpen1 = false;
-    go('building2');
-  });
-});
+  // move player and Clambert if door is open
+  player.action(() => {
+    if (doorOpen1 == true) {
+      player.pos = vec2(width() * 3 / 4, height() - 50);
+      clambert.pos = vec2(width() * 3 / 4, height() - 50);
+      doorOpen1 = false;
+    } else if (doorOpen2 == true) {
+      player.pos = vec2(width() * 2 / 4, height() - 50);
+      clambert.pos = vec2(width() * 2 / 4, height() - 50);
+      doorOpen2 = false;
+    } else if (start2Street == true) {
+      player.pos = vec2(width() - 50, height() - 50);
+      clambert.pos = vec2(width() - 50, height() - 50);
+      start2Street = false; // add this line to set start2Street to false
+    }
 
-player.collides("pDoor", () => {
-  keyPress('e', () => {
-    destroy(player);
-    doorOpen2 = false; // set doorOpen2 to true
-    doorOpen1 = false;
-    policeStationOpen = true;
-    go('policeStation');
+    if (player.pos.x >= width()) {
+      start2Street = true;
+      go('Start2');
+    }
   });
-});
+
+  //controls
+  keyDown("left", () => {
+    player.move(-(300), 0);
+  });
+
+  keyDown("right", () => {
+    player.move((300), 0);
+  });
+  player.collides("door1", () => {
+    keyPress('e', () => {
+      destroy(player);
+      doorOpen1 = true; // set doorOpen1 to true
+      doorOpen2 = false;
+      go('building1');
+    });
+  });
+
+  player.collides("door2", () => {
+    keyPress('e', () => {
+      destroy(player);
+      doorOpen2 = true; // set doorOpen2 to true
+      doorOpen1 = false;
+      go('building2');
+    });
+  });
+
+  player.collides("pDoor", () => {
+    keyPress('e', () => {
+      destroy(player);
+      doorOpen2 = false; // set doorOpen2 to true
+      doorOpen1 = false;
+      policeStationOpen = true;
+      go('policeStation');
+    });
+  });
   //
 });
 
@@ -834,7 +837,7 @@ scene('building1', () => {
   //NPC 
   addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 0);
   //furniture
-  spawnEnviornment(furniture1);
+  spawnEnviornment(furniture1, spawnedLocation);
 
   //other sprites
 
@@ -883,7 +886,6 @@ scene('building1', () => {
   player.collides("door1", () => {
     keyPress('e', () => {
       destroy(player);
-      destroyAll('furniture');
       doorOpen1 = true; // set doorOpen1 to true
       go('Start');
     });
@@ -940,6 +942,10 @@ scene('building2', () => {
   //npc spawn
 
   addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 1);
+
+  //furniture
+  spawnEnviornment(furniture2, spawnedLocation1);
+  
 
   const door2 = add([
     sprite('door'),
@@ -1040,6 +1046,8 @@ scene('building3', () => {
 
   //NPC 
   addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 2);
+  //furniture
+  spawnEnviornment(furniture3, spawnedLocation2);
 
   const door3 = add([
     sprite('door'),
@@ -1140,6 +1148,8 @@ scene('building4', () => {
 
   //NPC 
   addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 3);
+  //furniture
+  spawnEnviornment(furniture4, spawnedLocation3);
 
   const door4 = add([
     sprite('door'),
@@ -1602,16 +1612,24 @@ function randomEnviornment(furniture) {
   }
 }
 
-function spawnEnviornment(furniture) {
+function spawnEnviornment(furniture, location) {
+  var max = (width() * (5 / 8));
+  var min = ((width() / 4) + 25);
   for (var i = 0; i < 3; i++) {
-    var randomPosW = Math.floor(Math.random() * ((width() * (5 / 8)) - ((width() / 4) + 25) + 1)) + ((width() / 4) + 25);
+    var randomPosW = Math.floor(Math.random() * (max - min + 1)) + min;
     var randomPosH = height() - 50;
+    if (location[i] == 0) {
+      location[i] = randomPosW;
+    }
+    for (var x = 0; x < 4; x++){
+      randomCheck(i, location)
+    }
     if (furniture[0] == true && spawned[0] == false) {
       console.log('chair spawned');
       const chair = add([
         sprite('apple'),
         origin('center'),
-        pos(randomPosW, randomPosH),
+        pos(location[i], randomPosH),
         area(),
         'furniture',
       ]);
@@ -1621,7 +1639,7 @@ function spawnEnviornment(furniture) {
       const mirror = add([
         sprite('meat'),
         origin('center'),
-        pos(randomPosW, randomPosH),
+        pos(location[i], randomPosH),
         area(),
         'furniture',
       ]);
@@ -1631,7 +1649,8 @@ function spawnEnviornment(furniture) {
       const largeDresser = add([
         sprite('boom'),
         origin('center'),
-        pos(randomPosW, randomPosH),
+        scale(1/2),
+        pos(location[i], randomPosH),
         area(),
         'furniture',
       ]);
@@ -1641,7 +1660,7 @@ function spawnEnviornment(furniture) {
       const smallDresser = add([
         sprite('lemon'),
         origin('center'),
-        pos(randomPosW, randomPosH),
+        pos(location[i], randomPosH),
         area(),
         'furniture',
       ]);
@@ -1651,7 +1670,7 @@ function spawnEnviornment(furniture) {
       const desk = add([
         sprite('heart'),
         origin('center'),
-        pos(randomPosW, randomPosH),
+        pos(location[i], randomPosH),
         area(),
         'furniture',
       ]);
@@ -1661,7 +1680,7 @@ function spawnEnviornment(furniture) {
       const loveSeat = add([
         sprite('egg_crack'),
         origin('center'),
-        pos(randomPosW, randomPosH),
+        pos(location[i], randomPosH),
         area(),
         'furniture',
       ]);
@@ -1671,7 +1690,7 @@ function spawnEnviornment(furniture) {
       const cabinet = add([
         sprite('egg'),
         origin('center'),
-        pos(randomPosW, randomPosH),
+        pos(location[i], randomPosH),
         area(),
         'furniture',
       ]);
@@ -1681,7 +1700,7 @@ function spawnEnviornment(furniture) {
       const coffeeTable = add([
         sprite('coin'),
         origin('center'),
-        pos(randomPosW, randomPosH),
+        pos(location[i], randomPosH),
         area(),
         'furniture',
       ]);
@@ -1691,7 +1710,7 @@ function spawnEnviornment(furniture) {
       const sideTable = add([
         sprite('circle'),
         origin('center'),
-        pos(randomPosW, randomPosH),
+        pos(location[i], randomPosH),
         area(),
         'furniture',
       ]);
@@ -1701,7 +1720,7 @@ function spawnEnviornment(furniture) {
       const flowers = add([
         sprite('grass'),
         origin('center'),
-        pos(randomPosW, randomPosH),
+        pos(location[i], randomPosH),
         area(),
         'furniture',
       ]);
@@ -1709,4 +1728,58 @@ function spawnEnviornment(furniture) {
     }
   }
   spawned = [false, false, false, false, false, false, false, false, false, false];
+}
+
+function randomCheck(i, location) {
+    //checking to see if any sprites are ontop of eachother, OR if they are behind the door
+    for (var X = 0; X < 3; X++) {
+      var adjust = Math.floor(Math.random() * (100 - 50 + 1) + 50);
+      var random = Math.floor(Math.random() * (10 - 1 + 1) + 1);
+      if (i == X){
+        X++;
+        if ((Math.abs(location[i] - location[X]) <= 75)) {
+          if (random <= 50){
+            location[i] += adjust;
+          }else{
+            location[i] -= adjust;
+          }
+        }
+      }else{
+        if ((Math.abs(location[i] - location[X]) <= 75)) {
+          if (random >= 5){
+            location[i] += adjust;
+          }else{
+            location[i] -= adjust;
+          }
+        }
+      }
+    }
+    for (X = 0; X < 3; X++){
+      if (X == i){
+        X++;
+        if ((Math.abs(location[i] - (width() * .5)) <= 100)) {
+          if (random <= 50){
+            location[i] += adjust;
+          }else{
+           if ((Math.abs(location[i] - ((width() * 1 / 4) - 20)) <= 20)){
+              location[i] += adjust;
+            }else{
+              location[i] -= adjust;
+            }
+          }
+      }else{
+          if ((Math.abs(location[i] - (width() * .5)) <= 100)) {
+          if (random >= 5){
+            location[i] += adjust;
+          }else{
+            if ((Math.abs(location[i] - ((width() * 1 / 4) - 20)) <= 20)){
+              location[i] += adjust;
+            }else{
+              location[i] -= adjust;
+            }
+          }
+        }
+      }
+    }
+  }
 }

@@ -2960,6 +2960,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   var furniture3 = [false, false, false, false, false, false, false, false, false, false];
   var furniture4 = [false, false, false, false, false, false, false, false, false, false];
   var spawned = [false, false, false, false, false, false, false, false, false, false];
+  var spawnedLocation = [0, 0, 0];
+  var spawnedLocation1 = [0, 0, 0];
+  var spawnedLocation2 = [0, 0, 0];
+  var spawnedLocation3 = [0, 0, 0];
   no({
     background: [36, 36, 36]
   });
@@ -3026,10 +3030,10 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       addRandomNPCToScene(-1e3, -1e3, i2);
     }
     if (furniture1[0] == false && furniture1[1] == false && furniture1[2] == false && furniture1[3] == false && furniture1[4] == false && furniture1[5] == false && furniture1[6] == false && furniture1[7] == false && furniture1[8] == false && furniture1[9] == false) {
-      randomEnviornment(furniture1);
-      randomEnviornment(furniture2);
-      randomEnviornment(furniture3);
-      randomEnviornment(furniture4);
+      randomEnviornment(furniture1, spawnedLocation);
+      randomEnviornment(furniture2, spawnedLocation1);
+      randomEnviornment(furniture3, spawnedLocation2);
+      randomEnviornment(furniture4, spawnedLocation3);
     }
     const policeDoor = add([
       sprite("door"),
@@ -3601,7 +3605,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       color(50.2, 50.2, 50.2)
     ]);
     addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 0);
-    spawnEnviornment(furniture1);
+    spawnEnviornment(furniture1, spawnedLocation);
     const door1 = add([
       sprite("door"),
       pos(width() * 2 / 4, height() - 50),
@@ -3639,7 +3643,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     player.collides("door1", () => {
       keyPress("e", () => {
         destroy(player);
-        destroyAll("furniture");
         doorOpen1 = true;
         go("Start");
       });
@@ -3682,6 +3685,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       color(50.2, 50.2, 50.2)
     ]);
     addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 1);
+    spawnEnviornment(furniture2, spawnedLocation1);
     const door2 = add([
       sprite("door"),
       pos(width() * 2 / 4, height() - 50),
@@ -3761,6 +3765,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       color(50.2, 50.2, 50.2)
     ]);
     addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 2);
+    spawnEnviornment(furniture3, spawnedLocation2);
     const door3 = add([
       sprite("door"),
       pos(width() * 2 / 4, height() - 50),
@@ -3840,6 +3845,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       color(50.2, 50.2, 50.2)
     ]);
     addRandomNPCToScene(width() * 3 / 4 - 50, height() - 50, 3);
+    spawnEnviornment(furniture4, spawnedLocation3);
     const door4 = add([
       sprite("door"),
       pos(width() * 2 / 4, height() - 50),
@@ -4259,16 +4265,24 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
   }
   __name(randomEnviornment, "randomEnviornment");
-  function spawnEnviornment(furniture) {
+  function spawnEnviornment(furniture, location) {
+    var max = width() * (5 / 8);
+    var min = width() / 4 + 25;
     for (var i2 = 0; i2 < 3; i2++) {
-      var randomPosW = Math.floor(Math.random() * (width() * (5 / 8) - (width() / 4 + 25) + 1)) + (width() / 4 + 25);
+      var randomPosW = Math.floor(Math.random() * (max - min + 1)) + min;
       var randomPosH = height() - 50;
+      if (location[i2] == 0) {
+        location[i2] = randomPosW;
+      }
+      for (var x = 0; x < 4; x++) {
+        randomCheck(i2, location);
+      }
       if (furniture[0] == true && spawned[0] == false) {
         console.log("chair spawned");
         const chair = add([
           sprite("apple"),
           origin("center"),
-          pos(randomPosW, randomPosH),
+          pos(location[i2], randomPosH),
           area(),
           "furniture"
         ]);
@@ -4278,7 +4292,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         const mirror = add([
           sprite("meat"),
           origin("center"),
-          pos(randomPosW, randomPosH),
+          pos(location[i2], randomPosH),
           area(),
           "furniture"
         ]);
@@ -4288,7 +4302,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         const largeDresser = add([
           sprite("boom"),
           origin("center"),
-          pos(randomPosW, randomPosH),
+          scale(1 / 2),
+          pos(location[i2], randomPosH),
           area(),
           "furniture"
         ]);
@@ -4298,7 +4313,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         const smallDresser = add([
           sprite("lemon"),
           origin("center"),
-          pos(randomPosW, randomPosH),
+          pos(location[i2], randomPosH),
           area(),
           "furniture"
         ]);
@@ -4308,7 +4323,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         const desk = add([
           sprite("heart"),
           origin("center"),
-          pos(randomPosW, randomPosH),
+          pos(location[i2], randomPosH),
           area(),
           "furniture"
         ]);
@@ -4318,7 +4333,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         const loveSeat = add([
           sprite("egg_crack"),
           origin("center"),
-          pos(randomPosW, randomPosH),
+          pos(location[i2], randomPosH),
           area(),
           "furniture"
         ]);
@@ -4328,7 +4343,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         const cabinet = add([
           sprite("egg"),
           origin("center"),
-          pos(randomPosW, randomPosH),
+          pos(location[i2], randomPosH),
           area(),
           "furniture"
         ]);
@@ -4338,7 +4353,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         const coffeeTable = add([
           sprite("coin"),
           origin("center"),
-          pos(randomPosW, randomPosH),
+          pos(location[i2], randomPosH),
           area(),
           "furniture"
         ]);
@@ -4348,7 +4363,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         const sideTable = add([
           sprite("circle"),
           origin("center"),
-          pos(randomPosW, randomPosH),
+          pos(location[i2], randomPosH),
           area(),
           "furniture"
         ]);
@@ -4358,7 +4373,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         const flowers = add([
           sprite("grass"),
           origin("center"),
-          pos(randomPosW, randomPosH),
+          pos(location[i2], randomPosH),
           area(),
           "furniture"
         ]);
@@ -4368,5 +4383,58 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     spawned = [false, false, false, false, false, false, false, false, false, false];
   }
   __name(spawnEnviornment, "spawnEnviornment");
+  function randomCheck(i2, location) {
+    for (var X = 0; X < 3; X++) {
+      var adjust = Math.floor(Math.random() * (100 - 50 + 1) + 50);
+      var random = Math.floor(Math.random() * (10 - 1 + 1) + 1);
+      if (i2 == X) {
+        X++;
+        if (Math.abs(location[i2] - location[X]) <= 75) {
+          if (random <= 50) {
+            location[i2] += adjust;
+          } else {
+            location[i2] -= adjust;
+          }
+        }
+      } else {
+        if (Math.abs(location[i2] - location[X]) <= 75) {
+          if (random >= 5) {
+            location[i2] += adjust;
+          } else {
+            location[i2] -= adjust;
+          }
+        }
+      }
+    }
+    for (X = 0; X < 3; X++) {
+      if (X == i2) {
+        X++;
+        if (Math.abs(location[i2] - width() * 0.5) <= 100) {
+          if (random <= 50) {
+            location[i2] += adjust;
+          } else {
+            if (Math.abs(location[i2] - (width() * 1 / 4 - 20)) <= 20) {
+              location[i2] += adjust;
+            } else {
+              location[i2] -= adjust;
+            }
+          }
+        } else {
+          if (Math.abs(location[i2] - width() * 0.5) <= 100) {
+            if (random >= 5) {
+              location[i2] += adjust;
+            } else {
+              if (Math.abs(location[i2] - (width() * 1 / 4 - 20)) <= 20) {
+                location[i2] += adjust;
+              } else {
+                location[i2] -= adjust;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  __name(randomCheck, "randomCheck");
 })();
 //# sourceMappingURL=game.js.map
