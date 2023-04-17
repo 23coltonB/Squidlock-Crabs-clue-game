@@ -30,7 +30,6 @@ var suspect1 = false;
 var suspect2 = false;
 var suspect3 = false;
 var suspect4 = false;
-var suspect5 = false;
 var doorOpen1 = false;
 var doorOpen2 = false;
 var doorOpen3 = false;
@@ -88,6 +87,9 @@ loadSprite("egg", "sprites/egg.png");
 loadSprite("coin", "sprites/coin.png");
 loadSprite("circle", "sprites/circle.png");
 loadSprite("grass", "sprites/grass.png");
+loadSprite("moon", "sprites/moon.png");
+loadSprite("mushroom", "sprites/mushroom.png");
+loadSprite("lemon", "sprites/lemon.png");
 //sounds/music loading
 
 
@@ -530,6 +532,41 @@ scene('abandond_Building', () => {
     color(50.2, 50.2, 50.2),
   ]);
   //sprite
+
+  //furniture
+  for (var i = 1; i < 8; i++){
+    if ((i % 2) == 0){
+      if (i != 2 && i != 4){
+        for (var x = 0; x < 3; x++){
+          const crate = add([
+            sprite('moon'),
+            pos((width() * (i/9)) + (x * 50) + 100, height() - 50),
+            area(),
+            origin('center'),
+            "interactable",
+          ]);
+        }
+      }
+    }
+    if (i == 2){
+      const brokenDoor = add([
+        sprite('mushroom'),
+        origin('center'),
+        pos((width() * (i/9)), height() - 50),
+        area(),
+      ]);
+    }
+
+    if (i == 5){
+      const mirror = add([
+        sprite('meat'),
+        origin('center'),
+        pos((width() * (i/9)), height() - 50),
+        area(),
+      ]);
+    }
+  }
+
   const abandondD = add([
     sprite('door'),
     pos((width() * 1 / 2) - 50, height() - 50),
@@ -637,6 +674,23 @@ scene('alleyway', () => {
     color(50.2, 50.2, 50.2),
   ]);
   //sprites
+  
+  //furniture
+    for (var i = 0; i < 8; i++){
+        if ((i % 2) == 0){
+          if (width() * i / 8 != width() * 1 / 9 - 100){
+            const trashCan = add([
+              sprite('lemon'),
+              pos((width() * i / 9) + 300, height() - 50),
+              area(),
+              origin('center'),
+              'interactable',
+              'furniture',
+            ]);
+          }
+        }
+    }
+  //else
   const alleyWay = add([
     sprite('door'),
     pos(width() * 1 / 9 - 100, height() - 50),
@@ -725,6 +779,39 @@ scene('policeStation', () => {
   ]);
 
   //sprites
+
+    //furniture
+  for (var i = 1; i <= 3; i++){
+    const chair = add([
+      sprite('apple'),
+      origin('center'),
+      pos(width() * (i/5), height()-50),
+      area(),
+      'furniture',
+    ]);
+
+    const sideTable = add([
+        sprite('circle'),
+        origin('center'),
+        pos((width() * (i/5)) + 50, height()-50),
+        area(),
+        'furniture',
+        'interactable',
+      ]);
+    if (i == 1 || i == 3){
+      const flowers = add([
+        sprite('grass'),
+        origin('center'),
+        pos((width() * (i/5)) + 50, height() - 100),
+        area(),
+        'furniture',
+        'interactable',
+      ]);
+    }
+
+  }
+
+  //character
 
   const policeOfficer = add([
     sprite('cut'),
@@ -945,7 +1032,7 @@ scene('building2', () => {
 
   //furniture
   spawnEnviornment(furniture2, spawnedLocation1);
-  
+
 
   const door2 = add([
     sprite('door'),
@@ -1248,6 +1335,18 @@ scene('flowerShopBuilding', () => {
   ]);
 
   //sprites
+
+  //furniture
+  for (var i = 1; i <= 7; i++){
+    const flowers = add([
+        sprite('grass'),
+        origin('center'),
+        pos((width() * (i/9) + 100), height() - 50),
+        area(),
+        'furniture',
+        'interactable',
+      ]);
+  }
 
   const flowerShopDoor = add([
     sprite('door'),
@@ -1621,7 +1720,7 @@ function spawnEnviornment(furniture, location) {
     if (location[i] == 0) {
       location[i] = randomPosW;
     }
-    for (var x = 0; x < 4; x++){
+    for (var x = 0; x < 4; x++) {
       randomCheck(i, location)
     }
     if (furniture[0] == true && spawned[0] == false) {
@@ -1649,10 +1748,11 @@ function spawnEnviornment(furniture, location) {
       const largeDresser = add([
         sprite('boom'),
         origin('center'),
-        scale(1/2),
+        scale(1 / 2),
         pos(location[i], randomPosH),
         area(),
         'furniture',
+        'interactable',
       ]);
       spawned[2] = true;
     } else if (furniture[3] == true && spawned[3] == false) {
@@ -1663,6 +1763,7 @@ function spawnEnviornment(furniture, location) {
         pos(location[i], randomPosH),
         area(),
         'furniture',
+        'interactable',
       ]);
       spawned[3] = true;
     } else if (furniture[4] == true && spawned[4] == false) {
@@ -1673,6 +1774,7 @@ function spawnEnviornment(furniture, location) {
         pos(location[i], randomPosH),
         area(),
         'furniture',
+        'interactable',
       ]);
       spawned[4] = true;
     } else if (furniture[5] == true && spawned[5] == false) {
@@ -1693,6 +1795,7 @@ function spawnEnviornment(furniture, location) {
         pos(location[i], randomPosH),
         area(),
         'furniture',
+        'interactable',
       ]);
       spawned[6] = true;
     } else if (furniture[7] == true && spawned[7] == false) {
@@ -1713,6 +1816,7 @@ function spawnEnviornment(furniture, location) {
         pos(location[i], randomPosH),
         area(),
         'furniture',
+        'interactable',
       ]);
       spawned[8] = true;
     } else if (furniture[9] == true && spawned[9] == false) {
@@ -1723,6 +1827,7 @@ function spawnEnviornment(furniture, location) {
         pos(location[i], randomPosH),
         area(),
         'furniture',
+        'interactable',
       ]);
       spawned[9] = true;
     }
@@ -1731,50 +1836,55 @@ function spawnEnviornment(furniture, location) {
 }
 
 function randomCheck(i, location) {
-    //checking to see if any sprites are ontop of eachother, OR if they are behind the door
-    for (var X = 0; X < 3; X++) {
-      var adjust = Math.floor(Math.random() * (100 - 50 + 1) + 50);
-      var random = Math.floor(Math.random() * (10 - 1 + 1) + 1);
-      if (i == X){
-        X++;
-        if ((Math.abs(location[i] - location[X]) <= 75)) {
-          if (random <= 50){
-            location[i] += adjust;
-          }else{
-            location[i] -= adjust;
-          }
+  //checking to see if any sprites are ontop of eachother, OR if they are behind the door
+  var npcLocation = width() * 3 / 4;
+  for (var X = 0; X < 3; X++) {
+    var adjust = Math.floor(Math.random() * (100 - 50 + 1) + 50);
+    var random = Math.floor(Math.random() * (10 - 1 + 1) + 1);
+    if (i == X) {
+      X++;
+      if ((Math.abs(location[i] - location[X]) <= 75)) {
+        if (random <= 50) {
+          location[i] += adjust;
+        } else {
+          location[i] -= adjust;
         }
-      }else{
-        if ((Math.abs(location[i] - location[X]) <= 75)) {
-          if (random >= 5){
-            location[i] += adjust;
-          }else{
-            location[i] -= adjust;
-          }
+        X--;
+      }
+    } else {
+      if ((Math.abs(location[i] - location[X]) <= 75)) {
+          X--;
+        if (random >= 5) {
+          location[i] += adjust;
+        } else {
+          location[i] -= adjust;
         }
       }
     }
-    for (X = 0; X < 3; X++){
-      if (X == i){
-        X++;
-        if ((Math.abs(location[i] - (width() * .5)) <= 100)) {
-          if (random <= 50){
+  }
+  for (X = 0; X < 3; X++) {
+    if (X == i) {
+      X++;
+      if ((Math.abs(location[i] - (width() * .5)) <= 100)) {
+        if (random <= 50) {
+          location[i] += adjust;
+        } else {
+          if ((Math.abs(location[i] - ((width() * 1 / 4) - 20)) <= 20)) {
             location[i] += adjust;
-          }else{
-           if ((Math.abs(location[i] - ((width() * 1 / 4) - 20)) <= 20)){
-              location[i] += adjust;
-            }else{
-              location[i] -= adjust;
-            }
+          } else {
+            location[i] -= adjust;
           }
-      }else{
-          if ((Math.abs(location[i] - (width() * .5)) <= 100)) {
-          if (random >= 5){
+          X--;
+        }
+      } else {
+        if ((Math.abs(location[i] - (width() * .5)) <= 100)) {
+          X--;
+          if (random >= 5) {
             location[i] += adjust;
-          }else{
-            if ((Math.abs(location[i] - ((width() * 1 / 4) - 20)) <= 20)){
+          } else {
+            if ((Math.abs(location[i] - ((width() * 1 / 4) - 20)) <= 20)) {
               location[i] += adjust;
-            }else{
+            } else {
               location[i] -= adjust;
             }
           }

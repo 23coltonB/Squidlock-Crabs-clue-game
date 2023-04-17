@@ -2987,6 +2987,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("coin", "sprites/coin.png");
   loadSprite("circle", "sprites/circle.png");
   loadSprite("grass", "sprites/grass.png");
+  loadSprite("moon", "sprites/moon.png");
+  loadSprite("mushroom", "sprites/mushroom.png");
+  loadSprite("lemon", "sprites/lemon.png");
   scene("Title Screen", () => {
     add([
       rect(width(), height()),
@@ -3353,6 +3356,37 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       solid(),
       color(50.2, 50.2, 50.2)
     ]);
+    for (var i2 = 1; i2 < 8; i2++) {
+      if (i2 % 2 == 0) {
+        if (i2 != 2 && i2 != 4) {
+          for (var x = 0; x < 3; x++) {
+            const crate = add([
+              sprite("moon"),
+              pos(width() * (i2 / 9) + x * 50 + 100, height() - 50),
+              area(),
+              origin("center"),
+              "interactable"
+            ]);
+          }
+        }
+      }
+      if (i2 == 2) {
+        const brokenDoor = add([
+          sprite("mushroom"),
+          origin("center"),
+          pos(width() * (i2 / 9), height() - 50),
+          area()
+        ]);
+      }
+      if (i2 == 5) {
+        const mirror = add([
+          sprite("meat"),
+          origin("center"),
+          pos(width() * (i2 / 9), height() - 50),
+          area()
+        ]);
+      }
+    }
     const abandondD = add([
       sprite("door"),
       pos(width() * 1 / 2 - 50, height() - 50),
@@ -3443,6 +3477,20 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       solid(),
       color(50.2, 50.2, 50.2)
     ]);
+    for (var i2 = 0; i2 < 8; i2++) {
+      if (i2 % 2 == 0) {
+        if (width() * i2 / 8 != width() * 1 / 9 - 100) {
+          const trashCan = add([
+            sprite("lemon"),
+            pos(width() * i2 / 9 + 300, height() - 50),
+            area(),
+            origin("center"),
+            "interactable",
+            "furniture"
+          ]);
+        }
+      }
+    }
     const alleyWay = add([
       sprite("door"),
       pos(width() * 1 / 9 - 100, height() - 50),
@@ -3515,6 +3563,33 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       solid(),
       color(50.2, 50.2, 50.2)
     ]);
+    for (var i2 = 1; i2 <= 3; i2++) {
+      const chair = add([
+        sprite("apple"),
+        origin("center"),
+        pos(width() * (i2 / 5), height() - 50),
+        area(),
+        "furniture"
+      ]);
+      const sideTable = add([
+        sprite("circle"),
+        origin("center"),
+        pos(width() * (i2 / 5) + 50, height() - 50),
+        area(),
+        "furniture",
+        "interactable"
+      ]);
+      if (i2 == 1 || i2 == 3) {
+        const flowers = add([
+          sprite("grass"),
+          origin("center"),
+          pos(width() * (i2 / 5) + 50, height() - 100),
+          area(),
+          "furniture",
+          "interactable"
+        ]);
+      }
+    }
     const policeOfficer = add([
       sprite("cut"),
       pos(width() * 1 / 4, height() - 50),
@@ -3924,6 +3999,16 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       solid(),
       color(50.2, 50.2, 50.2)
     ]);
+    for (var i2 = 1; i2 <= 7; i2++) {
+      const flowers = add([
+        sprite("grass"),
+        origin("center"),
+        pos(width() * (i2 / 9) + 100, height() - 50),
+        area(),
+        "furniture",
+        "interactable"
+      ]);
+    }
     const flowerShopDoor = add([
       sprite("door"),
       pos(width() * 5 / 8, height() - 50),
@@ -4305,7 +4390,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
           scale(1 / 2),
           pos(location[i2], randomPosH),
           area(),
-          "furniture"
+          "furniture",
+          "interactable"
         ]);
         spawned[2] = true;
       } else if (furniture[3] == true && spawned[3] == false) {
@@ -4315,7 +4401,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
           origin("center"),
           pos(location[i2], randomPosH),
           area(),
-          "furniture"
+          "furniture",
+          "interactable"
         ]);
         spawned[3] = true;
       } else if (furniture[4] == true && spawned[4] == false) {
@@ -4325,7 +4412,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
           origin("center"),
           pos(location[i2], randomPosH),
           area(),
-          "furniture"
+          "furniture",
+          "interactable"
         ]);
         spawned[4] = true;
       } else if (furniture[5] == true && spawned[5] == false) {
@@ -4345,7 +4433,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
           origin("center"),
           pos(location[i2], randomPosH),
           area(),
-          "furniture"
+          "furniture",
+          "interactable"
         ]);
         spawned[6] = true;
       } else if (furniture[7] == true && spawned[7] == false) {
@@ -4365,7 +4454,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
           origin("center"),
           pos(location[i2], randomPosH),
           area(),
-          "furniture"
+          "furniture",
+          "interactable"
         ]);
         spawned[8] = true;
       } else if (furniture[9] == true && spawned[9] == false) {
@@ -4375,7 +4465,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
           origin("center"),
           pos(location[i2], randomPosH),
           area(),
-          "furniture"
+          "furniture",
+          "interactable"
         ]);
         spawned[9] = true;
       }
@@ -4384,6 +4475,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   }
   __name(spawnEnviornment, "spawnEnviornment");
   function randomCheck(i2, location) {
+    var npcLocation = width() * 3 / 4;
     for (var X = 0; X < 3; X++) {
       var adjust = Math.floor(Math.random() * (100 - 50 + 1) + 50);
       var random = Math.floor(Math.random() * (10 - 1 + 1) + 1);
@@ -4395,9 +4487,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
           } else {
             location[i2] -= adjust;
           }
+          X--;
         }
       } else {
         if (Math.abs(location[i2] - location[X]) <= 75) {
+          X--;
           if (random >= 5) {
             location[i2] += adjust;
           } else {
@@ -4418,9 +4512,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
             } else {
               location[i2] -= adjust;
             }
+            X--;
           }
         } else {
           if (Math.abs(location[i2] - width() * 0.5) <= 100) {
+            X--;
             if (random >= 5) {
               location[i2] += adjust;
             } else {
