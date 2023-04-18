@@ -1,35 +1,8 @@
 import kaboom from "kaboom"
 
 //global varibles
-var clue1 = false;
-var clue2 = false;
-var clue3 = false;
-var clue4 = false;
-var clue5 = false;
-var clue6 = false;
-var clue7 = false;
-var clue8 = false;
-var clue9 = false;
-var clue10 = false;
-var clue11 = false;
-var clue12 = false;
-var clue13 = false;
-var clue14 = false;
-var clue15 = false;
-var clue16 = false;
-var clue17 = false;
-var clue18 = false;
-var clue19 = false;
-var clue20 = false;
-var clue21 = false;
-var clue22 = false;
-var clue23 = false;
-var clue24 = false;
-var clue25 = false;
-var suspect1 = false;
-var suspect2 = false;
-var suspect3 = false;
-var suspect4 = false;
+var clues = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+var suspect = [false, false, false, false];
 var doorOpen1 = false;
 var doorOpen2 = false;
 var doorOpen3 = false;
@@ -53,6 +26,8 @@ var spawnedLocation = [0, 0, 0];
 var spawnedLocation1 = [0, 0, 0];
 var spawnedLocation2 = [0, 0, 0];
 var spawnedLocation3 = [0, 0, 0];
+// inventory
+var inventory = ['empty', 'empty', 'empty', 'empty', 'empty', 'empty'];
 
 
 // initialize context
@@ -1423,101 +1398,85 @@ function findGuilty() {
   //which suspect is guilty
   var guiltyID = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
   if (guiltyID == 1) {
-    //character 1 is guilty
-    console.log("sus 1 picked");
-    suspect1 = true;
+    console.log("Ducky the duck is the murderer");
+    suspect[0] = true;
   } else if (guiltyID == 2) {
-    suspect2 = true;
-    console.log("sus 2 picked");
+    suspect[1] = true;
+    console.log("Goober the blobfish is the murderer");
   } else if (guiltyID == 3) {
-    suspect3 = true;
-    console.log("sus 3 picked");
+    suspect[2] = true;
+    console.log("Andy the seal is the murderer");
   } else {
-    suspect4 = true;
-    console.log("sus 4 picked");
+    suspect[3] = true;
+    console.log("Bubbles the goldfish is the murderer");
   }
   //clue id lookup
   for (var i = 1; i <= 5; i++) {
     var clueID = Math.floor(Math.random() * (25 - 1 + 1)) + 1;
-    if (clueID == 1 && clue1 != true) {
-      //clue clue 1
-      clue1 = true;
-      console.log('clue 1 picked');
-    } else if (clueID == 2 && clue2 != true) {
-      console.log('clue 2 picked');
-      clue2 = true;
-    } else if (clueID == 3 && clue3 != true) {
-      console.log('clue 3 picked');
-      clue3 = true;
-    } else if (clueID == 4 && clue4 != true) {
-      console.log('clue 4 picked');
-      clue4 = true;
-    } else if (clueID == 5 && clue5 != true) {
-      console.log('clue 5 picked');
-      clue5 = true;
-    } else if (clueID == 6 && clue6 != true) {
-      console.log('clue 6 picked');
-      clue6 = true;
-    } else if (clueID == 7 && clue7 != true) {
-      console.log('clue 7 picked');
-      clue7 = true;
-    } else if (clueID == 8 && clue8 != true) {
-      console.log('clue 8 picked');
-      clue8 = true;
-    } else if (clueID == 9 && clue9 != true) {
-      console.log('clue 9 picked');
-      clue9 = true;
-    } else if (clueID == 10 && clue10 != true) {
-      console.log('clue 10 picked');
-      clue10 = true;
-    } else if (clueID == 11 && clue11 != true) {
-      console.log('clue 11 picked');
-      clue11 = true;
-    } else if (clueID == 12 && clue12 != true) {
-      console.log('clue 12 picked');
-      clue12 = true;
-    } else if (clueID == 13 && clue13 != true) {
-      console.log('clue 13 picked');
-      clue13 = true;
-    } else if (clueID == 14 && clue14 != true) {
-      console.log('clue 14 picked');
-      clue14 = true;
-    } else if (clueID == 15 && clue15 != true) {
-      console.log('clue 15 picked');
-      clue15 = true;
-    } else if (clueID == 16 && clue16 != true) {
-      console.log('clue 16 picked');
-      clue16 = true;
-    } else if (clueID == 17 && clue17 != true) {
-      console.log('clue 17 picked');
-      clue17 = true;
-    } else if (clueID == 18 && clue18 != true) {
-      console.log('clue 18 picked');
-      clue18 = true;
-    } else if (clueID == 19 && clue19 != true) {
-      console.log('clue 19 picked');
-      clue19 = true;
-    } else if (clueID == 20 && clue20 != true) {
-      console.log('clue 20 picked');
-      clue20 = true;
-    } else if (clueID == 21 && clue21 != true) {
-      console.log('clue 21 picked');
-      clue21 = true;
-    } else if (clueID == 22 && clue22 != true) {
-      console.log('clue 22 picked');
-      clue22 = true;
-    } else if (clueID == 23 && clue23 != true) {
-      console.log('clue 23 picked');
-      clue23 = true;
-    } else if (clueID == 24 && clue24 != true) {
-      console.log('clue 24 picked');
-      clue24 = true;
-    } else if (clueID == 25 && clue25 != true) {
-      console.log('clue 25 picked');
-      clue25 = true;
+    if ((clueID == 1 && clues[0] != true) && suspect[2] == true) {
+      clues[0] = true;
+      console.log('Squirt “gun” picked');
+    } else if ((clueID == 2 && clues[1] != true) && suspect[3] == true) {
+      console.log('Bag of “goldfish snacks picked');
+      clues[1] = true;
+    } else if ((clueID == 3 && clues[2] != true) && suspect[1] == true) {
+      console.log('bloody kelp picked');
+      clues[2] = true;
+    } else if ((clueID == 4 && clues[3] != true) && suspect[0] == true) {
+      console.log('Metal pipe picked');
+      clues[3] = true;
+    } else if ((clueID == 5 && clues[4] != true) && suspect[0] == true) {
+      console.log('Rusty knife picked');
+      clues[4] = true;
+    } else if ((clueID == 6 && clues[5] != true) && suspect[1] == true) {
+      // fill free to change this
+      console.log('Flame mignon picked');
+      clues[5] = true;
+    } else if ((clueID == 7 && clues[6] != true) && suspect[2] == true) {
+      console.log('Broken glass picked');
+      clues[6] = true;
+    } else if ((clueID == 8 && clues[7] != true) && suspect[3] == true) {
+      console.log('Poorly made pottery picked');
+      clues[7] = true;
+    } else if ((clueID == 9 && clues[8] != true) && suspect[2] == true) {
+      console.log('Six pack of fish flavored water picked');
+      clues[8] = true;
+    } else if ((clueID == 10 && clues[9] != true) && suspect[3] == true) {
+      console.log('Lily pad hat picked');
+      clues[9] = true;
+    } else if ((clueID == 11 && clues[10] != true) && suspect[3] == true) {
+      console.log('Kelp scarf picked');
+      clues[10] = true;
+    } else if ((clueID == 12 && clues[11] != true) && suspect[3] == true) {
+      console.log('Kelp dress picked');
+      clues[11] = true;
+    } else if ((clueID == 13 && clues[12] != true) && suspect[0] == true) {
+      console.log('Bones of a game designer picked');
+      clues[12] = true;
+    } else if ((clueID == 14 && clues[13] != true) && suspect[0] == true) {
+      console.log('Plastic bag picked');
+      clues[13] = true;
+    } else if ((clueID == 15 && clues[14] != true) && suspect[0] == true) {
+      console.log('Duck feathers picked');
+      clues[14] = true;
+    } else if ((clueID == 16 && clues[15] != true) && suspect[2] == true) {
+      console.log('Broken crate picked');
+      clues[15] = true;
+    } else if ((clueID == 17 && clues[16] != true) && suspect[1] == true) {
+      console.log('English breakfast picked');
+      clues[16] = true;
+    } else if ((clueID == 18 && clues[17] != true) && suspect[1] == true) {
+      console.log('A jar full of slime picked');
+      clues[17] = true;
+    } else if ((clueID == 19 && clues[18] != true) && suspect[1] == true) {
+      console.log('Goldfish food picked');
+      clues[18] = true;
+    } else if ((clueID == 20 && clues[19] != true) && suspect[2] == true) {
+      console.log('Seal ball picked');
+      clues[19] = true;
     } else {
       i--;
-      console.log("duplicate item found, finding another...");
+      console.log("duplicate item or character ID not found, refreshing...");
     }
   }
 }
