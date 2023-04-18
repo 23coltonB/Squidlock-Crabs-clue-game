@@ -3,16 +3,9 @@ import kaboom from "kaboom"
 //global varibles
 var clues = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
 var suspect = [false, false, false, false];
-var doorOpen1 = false;
-var doorOpen2 = false;
-var doorOpen3 = false;
-var doorOpen4 = false;
-var flowerShopOpen = false;
-var abandondDoor = false;
-var insideAlley = false;
+var doors = [false, false, false, false, false, false, false];
 var start2Street = false;
 var start3Street = false;
-var policeStationOpen = false;
 var talk = 0;
 var isInDialoge = false;
 let npcInBuilding = ['', '', '', ''];
@@ -177,14 +170,14 @@ scene('Start', () => {
 
   // move player and Clambert if door is open
   player.action(() => {
-    if (doorOpen1 == true) {
+    if (doors[0] == true) {
       player.pos = vec2(width() * 3 / 4, height() - 50);
       clambert.pos = vec2(width() * 3 / 4, height() - 50);
-      doorOpen1 = false;
-    } else if (doorOpen2 == true) {
+      doors[0] = false;
+    } else if (doors[1] == true) {
       player.pos = vec2(width() * 2 / 4, height() - 50);
       clambert.pos = vec2(width() * 2 / 4, height() - 50);
-      doorOpen2 = false;
+      doors[1] = false;
     } else if (start2Street == true) {
       player.pos = vec2(width() - 50, height() - 50);
       clambert.pos = vec2(width() - 50, height() - 50);
@@ -208,8 +201,8 @@ scene('Start', () => {
   player.collides("door1", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen1 = true; // set doorOpen1 to true
-      doorOpen2 = false;
+      doors[0] = true; // set doors[0] to true
+      doors[1] = false;
       go('building1');
     });
   });
@@ -217,8 +210,8 @@ scene('Start', () => {
   player.collides("door2", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen2 = true; // set doorOpen2 to true
-      doorOpen1 = false;
+      doors[1] = true; // set doors[1] to true
+      doors[0] = false;
       go('building2');
     });
   });
@@ -226,9 +219,9 @@ scene('Start', () => {
   player.collides("pDoor", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen2 = false; // set doorOpen2 to true
-      doorOpen1 = false;
-      policeStationOpen = true;
+      doors[1] = false; // set doors[1] to true
+      doors[0] = false;
+      doors[6] = true;
       go('policeStation');
     });
   });
@@ -302,22 +295,22 @@ scene('Start2', () => {
 
   // move player and Clambert if door is open
   player.action(() => {
-    if (doorOpen3 == true) {
+    if (doors[2] == true) {
       player.pos = vec2(width() * 1 / 8, height() - 50);
       clambert.pos = vec2(width() * 1 / 8, height() - 50);
-      doorOpen3 = false;
-    } else if (doorOpen4 == true) {
+      doors[2] = false;
+    } else if (doors[3] == true) {
       player.pos = vec2(width() * 7 / 8, height() - 50);
       clambert.pos = vec2(width() * 7 / 8, height() - 50);
-      doorOpen4 = false;
-    } else if (flowerShopOpen == true) {
+      doors[3] = false;
+    } else if (doors[4] == true) {
       player.pos = vec2(width() * 5 / 8, height() - 50);
       clambert.pos = vec2(width() * 5 / 8, height() - 50);
-      flowerShopOpen = false;
-    } else if (insideAlley == true) {
+      doors[4] = false;
+    } else if (doors[5] == true) {
       player.pos = vec2((width() * 3 / 8) + 100, height() - 50);
       clambert.pos = vec2((width() * 3 / 8) + 100, height() - 50);
-      insideAlley = false;
+      doors[5] = false;
     } else if (start3Street == true) {
       player.pos = vec2(width() - 50, height() - 50);
       clambert.pos = vec2(width() - 50, height() - 50);
@@ -344,10 +337,10 @@ scene('Start2', () => {
   player.collides("door3", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen3 = true; // set doorOpen3 to true
-      doorOpen4 = false;
-      flowerShopOpen = false;
-      insideAlley = false;
+      doors[2] = true; // set doors[2] to true
+      doors[3] = false;
+      doors[4] = false;
+      doors[5] = false;
       go('building3');
     });
   });
@@ -355,10 +348,10 @@ scene('Start2', () => {
   player.collides("door4", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen4 = true; // set doorOpen2 to true
-      doorOpen3 = false;
-      flowerShopOpen = false;
-      insideAlley = false;
+      doors[3] = true; // set doors[1] to true
+      doors[2] = false;
+      doors[4] = false;
+      doors[5] = false;
       go('building4');
     });
   });
@@ -366,20 +359,20 @@ scene('Start2', () => {
   player.collides("flowerShop", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen4 = false; // set doorOpen2 to true
-      doorOpen3 = false;
-      flowerShopOpen = true;
-      insideAlley = false;
+      doors[3] = false; // set doors[1] to true
+      doors[2] = false;
+      doors[4] = true;
+      doors[5] = false;
       go('flowerShopBuilding');
     });
   });
   player.collides("alley", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen3 = true; // set doorOpen3 to true
-      doorOpen4 = false;
-      flowerShopOpen = false;
-      insideAlley = false;
+      doors[2] = true; // set doors[2] to true
+      doors[3] = false;
+      doors[4] = false;
+      doors[5] = false;
       go('alleyway');
     });
   });
@@ -449,10 +442,10 @@ scene('Start3', () => {
   });
   // player movement
   player.action(() => {
-    if (abandondDoor == true) {
+    if (doors[5] == true) {
       player.pos = vec2((width() * 1 / 2) - 50, height() - 50);
       clambert.pos = vec2((width() * 1 / 2) - 50, height() - 50);
-      abandondDoor = false;
+      doors[5] = false;
     }
     if (player.pos.x <= 0) {
       go('Start2');
@@ -462,7 +455,7 @@ scene('Start3', () => {
   player.collides("edgeDoor", () => {
     keyPress('e', () => {
       destroy(player);
-      abandondDoor = true;
+      doors[5] = true;
       go('abandond_Building');
     });
   });
@@ -596,7 +589,7 @@ scene('abandond_Building', () => {
     keyPress('e', () => {
       if (isInDialoge == false) {
         destroy(player);
-        abandondDoor = true; // set to true, set anything else to false except the street values
+        doors[5] = true; // set to true, set anything else to false except the street values
         go('Start3');
       }
     });
@@ -707,7 +700,7 @@ scene('alleyway', () => {
     keyPress('e', () => {
       if (isInDialoge == false) {
         destroy(player);
-        insideAlley = true; // set to true, set anything else to false except the street values
+        doors[5] = true; // set to true, set anything else to false except the street values
         go('Start2');
       }
     });
@@ -842,7 +835,7 @@ scene('policeStation', () => {
     keyPress('e', () => {
       if (isInDialoge == false) {
         destroy(player);
-        policeStationOpen = true; // set to true
+        doors[6] = true; // set to true
         go('Start');
       }
     });
@@ -944,11 +937,17 @@ scene('building1', () => {
       player.move((300), 0);
     }
   });
+//working here!
+  player.collides('interactable', () => {
+    keyPress('e', () => {
+      populateClues(doors[0]);
+    });
+  });
 
   player.collides("door1", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen1 = true; // set doorOpen1 to true
+      doors[0] = true; // set doors[0] to true
       go('Start');
     });
   });
@@ -1053,7 +1052,7 @@ scene('building2', () => {
 
   player.collides('door2', () => {
     keyPress('e', () => {
-      doorOpen2 = true;
+      doors[1] = true;
       destroy(player);
       go('Start');
     });
@@ -1156,7 +1155,7 @@ scene('building3', () => {
   player.collides("door3", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen3 = true; // set doorOpen3 to true
+      doors[2] = true; // set doors[2] to true
       go('Start2');
     });
   });
@@ -1258,7 +1257,7 @@ scene('building4', () => {
   player.collides("door4", () => {
     keyPress('e', () => {
       destroy(player);
-      doorOpen4 = true; // set doorOpen1 to true
+      doors[3] = true; // set doors[0] to true
       go('Start2');
     });
   });
@@ -1851,4 +1850,9 @@ function randomCheck(i, location) {
       }
     }
   }
+}
+
+// this one populates clues in interactable items
+function populateClues(){
+  
 }
