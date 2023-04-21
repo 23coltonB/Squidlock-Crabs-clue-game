@@ -2,6 +2,7 @@ import kaboom from "kaboom"
 
 //global varibles
 var clues = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+var totalClues = 5;
 var suspect = [false, false, false, false];
 var doors = [false, false, false, false, false, false, false];
 var start2Street = false;
@@ -15,13 +16,30 @@ var furniture2 = [false, false, false, false, false, false, false, false, false,
 var furniture3 = [false, false, false, false, false, false, false, false, false, false];
 var furniture4 = [false, false, false, false, false, false, false, false, false, false];
 var spawned = [false, false, false, false, false, false, false, false, false, false];
+var itemSpawned = [false, false, false];
 var spawnedLocation = [0, 0, 0];
 var spawnedLocation1 = [0, 0, 0];
 var spawnedLocation2 = [0, 0, 0];
 var spawnedLocation3 = [0, 0, 0];
 // inventory
 var inventory = ['empty', 'empty', 'empty', 'empty', 'empty', 'empty'];
-
+//interactable arrays
+var unique = [false, false, false, false, false];
+//first building
+var buildingFurniture1 = ['', '', ''];
+var building1Items = ['empty', 'empty', 'empty'];
+//second buildign
+var buildingFurniture2 = ['', '', ''];
+var building2Items = ['empty', 'empty', 'empty'];
+//third building
+var buildingFurniture3 = ['', '', ''];
+var building3Items = ['empty', 'empty', 'empty'];
+//fourth building
+var buildingFurniture4 = ['', '', ''];
+var building4Items = ['empty', 'empty', 'empty'];
+var checking = false;
+//randomBuilding, first one is crate, the rest are trash cans
+var buildingRItems = ['empty', 'empty', 'empty', 'empty', 'empty'];
 
 // initialize context
 kaboom({
@@ -122,6 +140,10 @@ scene('Start', () => {
     randomEnviornment(furniture2, spawnedLocation1);
     randomEnviornment(furniture3, spawnedLocation2);
     randomEnviornment(furniture4, spawnedLocation3);
+    populateClues(buildingFurniture1, building1Items);
+    populateClues(buildingFurniture2, building2Items);
+    populateClues(buildingFurniture3, building3Items);
+    populateClues(buildingFurniture4, building4Items);
   }
   //everything else
   const policeDoor = add([
@@ -153,6 +175,7 @@ scene('Start', () => {
     area(),
     origin('topleft'),
     body(),
+    'player',
   ]);
 
   //clambert ai
@@ -278,6 +301,7 @@ scene('Start2', () => {
     area(),
     origin('topleft'),
     body(),
+    'player',
   ]);
 
   //clambert ai
@@ -418,6 +442,7 @@ scene('Start3', () => {
     area(),
     origin('topleft'),
     body(),
+    'player',
   ]);
 
   //clambert ai
@@ -558,6 +583,7 @@ scene('abandond_Building', () => {
     area(),
     origin('center'),
     body(),
+    'player',
   ]);
 
   //clambert ai
@@ -672,6 +698,7 @@ scene('alleyway', () => {
     area(),
     origin('center'),
     body(),
+    'player',
   ]);
 
   //clambert ai
@@ -773,7 +800,6 @@ scene('policeStation', () => {
         pos((width() * (i/5)) + 50, height() - 100),
         area(),
         'furniture',
-        'interactable',
       ]);
     }
 
@@ -804,6 +830,7 @@ scene('policeStation', () => {
     area(),
     origin('center'),
     body(),
+    'player',
   ]);
 
   //clambert ai
@@ -910,6 +937,7 @@ scene('building1', () => {
     area(),
     origin('topleft'),
     body(),
+    'player',
   ]);
 
   //clambert ai
@@ -1022,6 +1050,7 @@ scene('building2', () => {
     area(),
     origin('topleft'),
     body(),
+    'player',
   ]);
 
   //clambert ai
@@ -1124,6 +1153,7 @@ scene('building3', () => {
     area(),
     origin('topleft'),
     body(),
+    'player',
   ]);
 
   //clambert ai
@@ -1226,6 +1256,7 @@ scene('building4', () => {
     area(),
     origin('topleft'),
     body(),
+    'player',
   ]);
 
   //clambert ai
@@ -1318,7 +1349,6 @@ scene('flowerShopBuilding', () => {
         pos((width() * (i/9) + 100), height() - 50),
         area(),
         'furniture',
-        'interactable',
       ]);
   }
 
@@ -1336,6 +1366,7 @@ scene('flowerShopBuilding', () => {
     area(),
     origin('center'),
     body(),
+    'player',
   ]);
 
   const shopKeeper = add([
@@ -1415,7 +1446,7 @@ function findGuilty() {
     if ((clueID == 1 && clues[0] != true) && suspect[2] == true) {
       clues[0] = true;
       console.log('Squirt “gun” picked');
-    } else if ((clueID == 2 && clues[1] != true) && suspect[3] == true) {
+    } else if ((clueID == 2 && clues[1] != true) && suspect[1] == true) {
       console.log('Bag of “goldfish snacks picked');
       clues[1] = true;
     } else if ((clueID == 3 && clues[2] != true) && suspect[1] == true) {
@@ -1467,7 +1498,7 @@ function findGuilty() {
     } else if ((clueID == 18 && clues[17] != true) && suspect[1] == true) {
       console.log('A jar full of slime picked');
       clues[17] = true;
-    } else if ((clueID == 19 && clues[18] != true) && suspect[1] == true) {
+    } else if ((clueID == 19 && clues[18] != true) && suspect[3] == true) {
       console.log('Goldfish food picked');
       clues[18] = true;
     } else if ((clueID == 20 && clues[19] != true) && suspect[2] == true) {
@@ -1669,7 +1700,8 @@ function randomEnviornment(furniture) {
   }
 }
 
-function spawnEnviornment(furniture, location) {
+//working
+function spawnEnviornment(furniture, location, furnituresPresent) {
   var max = (width() * (5 / 8));
   var min = ((width() / 4) + 25);
   for (var i = 0; i < 3; i++) {
@@ -1785,7 +1817,6 @@ function spawnEnviornment(furniture, location) {
         pos(location[i], randomPosH),
         area(),
         'furniture',
-        'interactable',
       ]);
       spawned[9] = true;
     }
@@ -1853,6 +1884,294 @@ function randomCheck(i, location) {
 }
 
 // this one populates clues in interactable items
-function populateClues(){
-  
+function populateClues(buildingFurniture, buildingItems) {
+  for (var i = 0; i <= 3; i++) {
+    if (buildingItems[i] == 'chair' || buildingItems[i] == 'mirror' || buildingItems[i] == 'love seat' || buildingItems[i] == 'coffee table' || buildingItems[i] == 'flowers') {
+      buildingFurniture[i] = 'N/A';
+    } else {
+      if (buildingFurniture[i] == '') {
+        var randomClues = Math.floor(Math.random() * (100 - 1 + 1) + 1);
+        //check for the interactables, if so, which ones are they? then randomize where buildingFurniture[i]s go? Build a check to see which randomClues is what?
+        console.log(randomClues);
+        if (randomClues <= 35 && checking == false) {
+          buildingFurniture[i] = 'empty';
+        } else {
+          checking = true;
+          var randomItem = Math.floor(Math.random() * (unique.length));
+          console.log('item number = ' + randomItem);
+          if (clues[randomItem] != false || totalClues != 0) {
+            if (totalClues != 0) {
+              if (suspect[0] == true) {
+                //ducky
+                if (randomItem == 0 && unique[0] == false) {
+                  buildingFurniture[i] = 'Metal pipe';
+                  checking = false;
+                  unique[0] = true;
+                  totalClues--;
+                } else if (randomItem == 1 && unique[1] == false) {
+                  buildingFurniture[i] = 'Rusty knife';
+                  checking = false;
+                  unique[1] = true;
+                  totalClues--;
+                } else if (randomItem == 2 && unique[2] == false) {
+                  buildingFurniture[i] = 'Bones of a game designer';
+                  checking = false;
+                  unique[2] = true;
+                  totalClues--;
+                } else if (randomItem == 3 && unique[3] == false) {
+                  buildingFurniture[i] = 'Plastic bag';
+                  checking = false;
+                  unique[3] = true;
+                  totalClues--;
+                } else if (randomItem == 4 && unique[4] == false) {
+                  buildingFurniture[i] = 'Duck feathers';
+                  checking = false;
+                  unique[4] = true;
+                  totalClues--;
+                } else {
+                  console.log('Error: Item already selected');
+                  i--;
+                }
+              } else if (suspect[1] == true) {
+                //goober
+                if (randomItem == 0 && unique[0] == false) {
+                  buildingFurniture[i] = 'bloody kelp';
+                  checking = false;
+                  unique[0] = true;
+                  totalClues--;
+                } else if (randomItem == 1 && unique[1] == false) {
+                  buildingFurniture[i] = 'Flame mignon';
+                  checking = false;
+                  unique[1] = true;
+                  totalClues--;
+                } else if (randomItem == 2 && unique[2] == false) {
+                  buildingFurniture[i] = 'English breakfast';
+                  checking = false;
+                  unique[2] = true;
+                  totalClues--;
+                } else if (randomItem == 3 && unique[3] == false) {
+                  buildingFurniture[i] = 'A jar full of slime';
+                  checking = false;
+                  unique[3] = true;
+                  totalClues--;
+                } else if (randomItem == 4 && unique[4] == false) {
+                  buildingFurniture[i] = 'Bag of “goldfish snacks"';
+                  checking = false;
+                  unique[4] = true;
+                  totalClues--;
+                } else {
+                  console.log('Error: Item already selected');
+                  i--;
+                }
+              } else if (suspect[2] == true) {
+                //andy
+                if (randomItem == 0 && unique[0] == false) {
+                  buildingFurniture[i] = 'Squirt "Gun"';
+                  totalClues--;
+                  unique[0] = true;
+                  checking = false;
+                } else if (randomItem == 1 && unique[1] == false) {
+                  buildingFurniture[i] = 'Broken glass';
+                  checking = false;
+                  unique[1] = true;
+                  totalClues--;
+                } else if (randomItem == 2 && unique[2] == false) {
+                  buildingFurniture[i] = 'Six pack of fish flavored water';
+                  checking = false;
+                  unique[2] = true;
+                  totalClues--
+                } else if (randomItem == 3 && unique[3] == false) {
+                  buildingFurniture[i] = 'Broken crate';
+                  checking = false;
+                  unique[3] = true;
+                  totalClues--;
+                } else if (randomItem == 4 && unique[4] == false) {
+                  buildingFurniture[i] = 'Seal ball';
+                  checking = false;
+                  unique[4] = true;
+                  totalClues--;
+                } else {
+                  console.log('Error: Item already selected');
+                  i--;
+                }
+              } else if (suspect[3] == true) {
+                //bubbles
+                if (randomItem == 0 && unique[0] == false) {
+                  buildingFurniture[i] = 'Poorly made pottery';
+                  checking = false;
+                  unique[0] = true;
+                  totalClues--;
+                } else if (randomItem == 1 && unique[1] == false) {
+                  buildingFurniture[i] = 'Lily pad hat';
+                  checking = false;
+                  unique[1] = true;
+                  totalClues--;
+                } else if (randomItem == 2 && unique[2] == false) {
+                  buildingFurniture[i] = 'Kelp scarf';
+                  checking = false;
+                  unique[2] = true;
+                  totalClues--;
+                } else if (randomItem == 3 && unique[3] == false) {
+                  buildingFurniture[i] = 'Kelp dress';
+                  checking = false;
+                  unique[3] = true;
+                  totalClues--;
+                } else if (randomItem == 4 && unique[4] == false) {
+                  buildingFurniture[i] = 'Goldfish food';
+                  checking = false;
+                  unique[4] = true;
+                  totalClues--;
+                } else {
+                  console.log('Error: Item already selected');
+                  i--;
+                }
+              } else {
+                console.log('Error: No suspect selected.');
+              }
+            }
+          } else {
+            if (totalClues == 0) {
+              console.log('All items are placed, no need to add more.');
+              buildingFurniture[i] = 'empty';
+            } else {
+              console.log('Error: item not selected. Selecting another...');
+              i--;
+            }
+          }
+        }
+      }
+    }
+  }
+  console.log('total pre-extra populate: ' + totalClues);
+  //crate and trashcan can be used to populate
+  if (totalClues >= 1 && totalClues != 5) {
+    var randomExtra = Math.floor(Math.random() * (buildingRItems.length));
+    if (suspect[0] == true) {
+      //ducky
+      if (randomExtra == 0 && unique[0] == false) {
+        buildingRItems[randomExtra] = 'Metal pipe';
+        checking = false;
+        unique[0] = true;
+        totalClues--;
+      } else if (randomExtra == 1 && unique[1] == false) {
+        buildingRItems[randomExtra] = 'Rusty knife';
+        checking = false;
+        unique[1] = true;
+        totalClues--;
+      } else if (randomExtra == 2 && unique[2] == false) {
+        buildingRItems[randomExtra] = 'Bones of a game designer';
+        checking = false;
+        unique[2] = true;
+        totalClues--;
+      } else if (randomExtra == 3 && unique[3] == false) {
+        buildingRItems[randomExtra] = 'Plastic bag';
+        checking = false;
+        unique[3] = true;
+        totalClues--;
+      } else if (randomExtra == 4 && unique[4] == false) {
+        buildingRItems[randomExtra] = 'Duck feathers';
+        checking = false;
+        unique[4] = true;
+        totalClues--;
+      } else {
+        console.log('Error: Item already selected 2');
+        
+      }
+    } else if (suspect[1] == true) {
+      //goober
+      if (randomExtra == 0 && unique[0] == false) {
+        buildingRItems[randomExtra] = 'bloody kelp';
+        checking = false;
+        unique[0] = true;
+        totalClues--;
+      } else if (randomExtra == 1 && unique[1] == false) {
+        buildingRItems[randomExtra] = 'Flame mignon';
+        checking = false;
+        unique[1] = true;
+        totalClues--;
+      } else if (randomExtra == 2 && unique[2] == false) {
+        buildingRItems[randomExtra] = 'English breakfast';
+        checking = false;
+        unique[2] = true;
+        totalClues--;
+      } else if (randomExtra == 3 && unique[3] == false) {
+        buildingRItems[randomExtra] = 'A jar full of slime';
+        checking = false;
+        unique[3] = true;
+        totalClues--;
+      } else if (randomExtra == 4 && unique[4] == false) {
+        buildingRItems[randomExtra] = 'Bag of “goldfish snacks"';
+        checking = false;
+        unique[4] = true;
+        totalClues--;
+      } else {
+        console.log('Error: Item already selected 2');
+        
+      }
+    } else if (suspect[2] == true) {
+      //andy
+      if (randomExtra == 0 && unique[0] == false) {
+        buildingRItems[randomExtra] = 'Squirt "Gun"';
+        totalClues--;
+        unique[0] = true;
+        checking = false;
+      } else if (randomExtra == 1 && unique[1] == false) {
+        buildingRItems[randomExtra] = 'Broken glass';
+        checking = false;
+        unique[1] = true;
+        totalClues--;
+      } else if (randomExtra == 2 && unique[2] == false) {
+        buildingRItems[randomExtra] = 'Six pack of fish flavored water';
+        checking = false;
+        unique[2] = true;
+        totalClues--;
+      } else if (randomExtra == 3 && unique[3] == false) {
+        buildingRItems[randomExtra] = 'Broken crate';
+        checking = false;
+        unique[3] = true;
+        totalClues--;
+      } else if (randomExtra == 4 && unique[4] == false) {
+        buildingRItems[randomExtra] = 'Seal ball';
+        checking = false;
+        unique[4] = true;
+        totalClues--;
+      } else {
+        console.log('Error: Item already selected 2');
+        
+      }
+    } else if (suspect[3] == true) {
+      //bubbles
+      if (randomExtra == 0 && unique[0] == false) {
+        buildingRItems[randomExtra] = 'Poorly made pottery';
+        checking = false;
+        unique[0] = true;
+        totalClues--;
+      } else if (randomExtra == 1 && unique[1] == false) {
+        buildingRItems[randomExtra] = 'Lily pad hat';
+        checking = false;
+        unique[1] = true;
+        totalClues--;
+      } else if (randomExtra == 2 && unique[2] == false) {
+        buildingRItems[randomExtra] = 'Kelp scarf';
+        checking = false;
+        unique[2] = true;
+        totalClues--;
+      } else if (randomExtra == 3 && unique[3] == false) {
+        buildingRItems[randomExtra] = 'Kelp dress';
+        checking = false;
+        unique[3] = true;
+        totalClues--;
+      } else if (randomExtra == 4 && unique[4] == false) {
+        buildingRItems[randomExtra] = 'Goldfish food';
+        checking = false;
+        unique[4] = true;
+        totalClues--;
+      } else {
+        console.log('Error: Item already selected 2');
+        
+      }
+    } else {
+      console.log('Error: No suspect selected.');
+    }
+  }
 }
